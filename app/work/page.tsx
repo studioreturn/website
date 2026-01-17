@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { PageWrapper } from "@/components/page-wrapper"
+import { ArrowUpRight } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Work | Return",
@@ -34,9 +35,10 @@ export default function WorkPage() {
                 href="https://letsbreakout.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-4 text-white font-mono text-sm underline hover:opacity-70 transition-opacity"
+                className="inline-flex items-center gap-1 mt-4 text-white font-mono text-sm underline hover:opacity-70 transition-opacity"
               >
                 View project
+                <ArrowUpRight className="w-3 h-3" />
               </a>
             </div>
 

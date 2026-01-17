@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
 
 export function Footer() {
   return (
@@ -10,15 +11,15 @@ export function Footer() {
             <div
               className="text-white"
               style={{
-                fontFamily: "'Arial Black', Arial, sans-serif",
+                fontFamily: "Arial, sans-serif",
                 fontSize: "32px",
-                lineHeight: "40px",
+                lineHeight: 1,
                 fontWeight: "bold",
               }}
             >
               :)
             </div>
-            <p className="text-white/70 font-mono text-sm">Polite products from Bristol, UK</p>
+            <p className="text-white/70 font-mono text-sm">Nicely made things. From Bristol, UK.</p>
             <div className="space-y-1 pt-2">
               <a
                 href="mailto:hello@studioreturn.co"
@@ -92,41 +93,46 @@ export function Footer() {
                 href="https://www.instagram.com/studioreturn.co/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
+                className="inline-flex items-center gap-1 hover:text-white transition-colors"
               >
                 Instagram
+                <ArrowUpRight className="w-3 h-3" />
               </a>
               <a
                 href="https://dribbble.com/studioreturn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
+                className="inline-flex items-center gap-1 hover:text-white transition-colors"
               >
                 Dribbble
+                <ArrowUpRight className="w-3 h-3" />
               </a>
               <a
                 href="https://www.behance.net/studioreturn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
+                className="inline-flex items-center gap-1 hover:text-white transition-colors"
               >
                 Behance
+                <ArrowUpRight className="w-3 h-3" />
               </a>
               <a
                 href="https://bsky.app/profile/studioreturn.co"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
+                className="inline-flex items-center gap-1 hover:text-white transition-colors"
               >
                 Bluesky
+                <ArrowUpRight className="w-3 h-3" />
               </a>
               <a
                 href="https://www.linkedin.com/company/studioreturn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
+                className="inline-flex items-center gap-1 hover:text-white transition-colors"
               >
                 LinkedIn
+                <ArrowUpRight className="w-3 h-3" />
               </a>
             </div>
           </div>

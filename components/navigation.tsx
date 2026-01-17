@@ -6,21 +6,36 @@ import { ArrowRight } from "lucide-react"
 import { useState, useEffect } from "react"
 
 export function Navigation() {
-  const pathname = usePathname()
+  const pathname = usePathname() ?? ""
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
+    const boundary = document.querySelector("[data-header-boundary]")
+    if (boundary) {
+      // Switch to white when the blue section (hero + Selected work) has scrolled out of view
+      const syncFromBoundary = () => {
+        const rect = boundary.getBoundingClientRect()
+        setIsScrolled(rect.bottom <= 0)
+      }
+      syncFromBoundary()
+
+      const observer = new IntersectionObserver(
+        ([entry]) => setIsScrolled(!entry.isIntersecting),
+        { threshold: 0 }
+      )
+      observer.observe(boundary)
+      return () => observer.disconnect()
+    }
+
+    // Fallback on pages without the boundary (e.g. /work, /about)
     const handleScroll = () => {
-      // Hero section is roughly viewport height, so trigger at ~80% of viewport
       const heroHeight = window.innerHeight * 0.8
       setIsScrolled(window.scrollY > heroHeight)
     }
-
     window.addEventListener("scroll", handleScroll)
-    handleScroll() // Check initial state
-
+    handleScroll()
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [pathname])
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -36,7 +51,9 @@ export function Navigation() {
       className="w-full py-6 px-8 sticky top-0 z-50 transition-all duration-300"
       style={{
         backgroundColor: isScrolled ? "#ffffff" : "#1100FF",
-        borderBottom: isScrolled ? "1px solid rgba(17, 0, 255, 0.1)" : "none",
+        borderBottom: isScrolled
+          ? "1px solid rgba(17, 0, 255, 0.1)"
+          : "1px solid rgba(255, 255, 255, 0.2)",
       }}
     >
       <div className="max-w-6xl mx-auto flex items-center justify-between">
