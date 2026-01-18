@@ -133,4 +133,16 @@
   body {
     @apply bg-background text-foreground;
   }
+  .return-heading {
+    font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif !important;
+    font-weight: 300 !important;
+    font-style: italic !important;
+    -webkit-text-stroke: 0.6px currentColor;
+    text-shadow: 
+      0 0 1px currentColor,
+      0.5px 0 0 currentColor,
+      -0.5px 0 0 currentColor,
+      0 0.5px 0 currentColor,
+      0 -0.5px 0 currentColor;
+  }
 }

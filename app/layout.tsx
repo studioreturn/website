@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono, Space_Mono, Cormorant_Garamond } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import localFont from "next/font/local"
+import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 
 const vastXXLBlack = localFont({
@@ -45,7 +46,8 @@ export default function RootLayout({
     <html lang="en" className={`${spaceMono.variable} ${vastXXLBlack.variable} ${cormorantGaramond.variable}`}>
       <body className={`font-sans antialiased`}>
         {children}
-        <Analytics />
+        <Toaster />
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   )

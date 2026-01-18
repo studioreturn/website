@@ -19,7 +19,7 @@ export function Footer() {
             >
               :)
             </div>
-            <p className="text-white/70 font-mono text-sm">Nicely made things. From Bristol, UK.</p>
+            <p className="text-white/70 font-mono text-sm">Nicely made things.</p>
             <div className="space-y-1 pt-2">
               <a
                 href="mailto:hello@studioreturn.co"
@@ -31,7 +31,7 @@ export function Footer() {
                 href="tel:07707683220"
                 className="block text-white/70 font-mono text-sm hover:text-white transition-colors"
               >
-                07707 683 220
+                (+44) 07707 683220
               </a>
             </div>
           </div>
