@@ -146,3 +146,55 @@
       0 -0.5px 0 currentColor;
   }
 }
+
+@keyframes drawVertical {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+@keyframes drawHorizontal {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

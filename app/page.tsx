@@ -3,8 +3,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { PageWrapper } from "@/components/page-wrapper"
-import { Palette, Globe, Layers, ArrowUpRight, ArrowRight, Copy } from "lucide-react"
-import { useState } from "react"
+import { ArrowUpRight, ArrowRight, Copy } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
 import { useToast } from "@/hooks/use-toast"
 
 const BLUE = "#1100FF"
@@ -13,6 +13,66 @@ const GREY_BG = "#f5f5fa" // Light grey with subtle blue tint for alternating se
 
 export default function Page() {
   const { toast } = useToast()
+  const workGridRef = useRef<HTMLDivElement>(null)
+  const workSectionRef = useRef<HTMLDivElement>(null)
+  const [horizontalLinePositions, setHorizontalLinePositions] = useState<number[]>([])
+
+  useEffect(() => {
+    const calculateLinePositions = () => {
+      if (!workGridRef.current || !workSectionRef.current) return
+      
+      const grid = workGridRef.current
+      const section = workSectionRef.current
+      
+      // Find the group divs and get their first child (the thumbnail)
+      const groups = grid.querySelectorAll('.group')
+      if (groups.length < 4) return
+
+      // Grid is 2 columns, so:
+      // Row 1: groups[0] (left), groups[1] (right)
+      // Row 2: groups[2] (left), groups[3] (right)
+      const firstRowLeft = groups[0] as HTMLElement
+      const firstRowRight = groups[1] as HTMLElement
+      const secondRowLeft = groups[2] as HTMLElement
+      const secondRowRight = groups[3] as HTMLElement
+      
+      // Get the thumbnail divs (first child of each group - the aspect-[4/3] div)
+      const firstRowLeftThumb = firstRowLeft.firstElementChild as HTMLElement
+      const firstRowRightThumb = firstRowRight.firstElementChild as HTMLElement
+      const secondRowLeftThumb = secondRowLeft.firstElementChild as HTMLElement
+      const secondRowRightThumb = secondRowRight.firstElementChild as HTMLElement
+      
+      if (!firstRowLeftThumb || !firstRowRightThumb || !secondRowLeftThumb || !secondRowRightThumb) return
+      
+      const sectionRect = section.getBoundingClientRect()
+      const firstRowLeftRect = firstRowLeftThumb.getBoundingClientRect()
+      const firstRowRightRect = firstRowRightThumb.getBoundingClientRect()
+      const secondRowLeftRect = secondRowLeftThumb.getBoundingClientRect()
+      const secondRowRightRect = secondRowRightThumb.getBoundingClientRect()
+      
+      // Calculate positions relative to the section (where grid lines container is positioned)
+      // Four lines: top and bottom of each row
+      const topOfFirstRow = firstRowLeftRect.top - sectionRect.top
+      const bottomOfFirstRow = Math.max(firstRowLeftRect.bottom, firstRowRightRect.bottom) - sectionRect.top
+      const topOfSecondRow = secondRowLeftRect.top - sectionRect.top
+      const bottomOfSecondRow = Math.max(secondRowLeftRect.bottom, secondRowRightRect.bottom) - sectionRect.top
+      
+      setHorizontalLinePositions([topOfFirstRow, bottomOfFirstRow, topOfSecondRow, bottomOfSecondRow])
+    }
+
+    // Wait for layout to settle, try multiple times to ensure elements are rendered
+    const timeoutId1 = setTimeout(calculateLinePositions, 100)
+    const timeoutId2 = setTimeout(calculateLinePositions, 500)
+    const timeoutId3 = setTimeout(calculateLinePositions, 1000)
+    window.addEventListener('resize', calculateLinePositions)
+    
+    return () => {
+      clearTimeout(timeoutId1)
+      clearTimeout(timeoutId2)
+      clearTimeout(timeoutId3)
+      window.removeEventListener('resize', calculateLinePositions)
+    }
+  }, [])
 
   const copyToClipboard = async (text: string, type: string) => {
     try {
@@ -59,7 +119,10 @@ export default function Page() {
                   left: 0,
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0s'
                 }}
               />
               {/* End of first column */}
@@ -69,7 +132,10 @@ export default function Page() {
                   left: 'calc(50% - 1rem)',
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.05s'
                 }}
               />
               {/* Start of second column */}
@@ -79,7 +145,10 @@ export default function Page() {
                   left: 'calc(50% + 1rem)',
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.1s'
                 }}
               />
               {/* Right edge */}
@@ -89,16 +158,33 @@ export default function Page() {
                   right: 0,
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.15s'
                 }}
               />
             </div>
           </div>
           <div className="max-w-6xl mx-auto w-full">
-            <h1 className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide return-heading">
+            <h1 
+              className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide return-heading"
+              style={{ 
+                animation: 'fadeInUp 0.4s ease-out forwards',
+                opacity: 0,
+                animationDelay: '0.1s'
+              }}
+            >
               RETURN
             </h1>
-            <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed mb-6">
+            <p 
+              className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed mb-6"
+              style={{ 
+                animation: 'fadeInUp 0.4s ease-out forwards',
+                opacity: 0,
+                animationDelay: '0.15s'
+              }}
+            >
               Nicely made brands, websites and digital products.
             </p>
             <a
@@ -108,7 +194,12 @@ export default function Page() {
                 document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
               }}
               className="inline-flex items-center gap-2 px-6 py-3 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors"
-              style={{ color: BLUE }}
+              style={{ 
+                color: BLUE,
+                animation: 'fadeInUp 0.4s ease-out forwards',
+                opacity: 0,
+                animationDelay: '0.2s'
+              }}
             >
               Let&apos;s talk
               <ArrowRight className="w-4 h-4" />
@@ -116,9 +207,10 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="px-8 pt-10 pb-12 relative" style={{ backgroundColor: BLUE }}>
+        <div ref={workSectionRef} className="px-8 pt-10 pb-12 relative" style={{ backgroundColor: BLUE }}>
           {/* Grid lines for selected work section */}
           <div className="hidden md:block absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+            {/* Vertical lines - constrained to content width */}
             <div className="max-w-6xl mx-auto h-full relative px-8">
               {/* Left edge of first column */}
               <div 
@@ -127,7 +219,10 @@ export default function Page() {
                   left: 0,
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.15s'
                 }}
               />
               {/* End of first column */}
@@ -137,7 +232,10 @@ export default function Page() {
                   left: 'calc(50% - 1rem)',
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.2s'
                 }}
               />
               {/* Start of second column */}
@@ -147,7 +245,10 @@ export default function Page() {
                   left: 'calc(50% + 1rem)',
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.25s'
                 }}
               />
               {/* Right edge */}
@@ -157,19 +258,94 @@ export default function Page() {
                   right: 0,
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.3s'
                 }}
               />
             </div>
+            
+            {/* Horizontal lines - full width, aligned with work thumbnails */}
+            {horizontalLinePositions.length >= 4 && (
+              <>
+                {/* Top of first row */}
+                <div 
+                  className="absolute left-0 right-0"
+                  style={{ 
+                    top: `${horizontalLinePositions[0]}px`,
+                    height: '1px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    zIndex: 0,
+                    opacity: 0,
+                    animation: 'drawHorizontal 0.4s ease-out forwards',
+                    animationDelay: '0.4s'
+                  }}
+                />
+                {/* Bottom of first row */}
+                <div 
+                  className="absolute left-0 right-0"
+                  style={{ 
+                    top: `${horizontalLinePositions[1]}px`,
+                    height: '1px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    zIndex: 0,
+                    opacity: 0,
+                    animation: 'drawHorizontal 0.4s ease-out forwards',
+                    animationDelay: '0.45s'
+                  }}
+                />
+                {/* Top of second row */}
+                <div 
+                  className="absolute left-0 right-0"
+                  style={{ 
+                    top: `${horizontalLinePositions[2]}px`,
+                    height: '1px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    zIndex: 0,
+                    opacity: 0,
+                    animation: 'drawHorizontal 0.4s ease-out forwards',
+                    animationDelay: '0.5s'
+                  }}
+                />
+                {/* Bottom of second row */}
+                <div 
+                  className="absolute left-0 right-0"
+                  style={{ 
+                    top: `${horizontalLinePositions[3]}px`,
+                    height: '1px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    zIndex: 0,
+                    opacity: 0,
+                    animation: 'drawHorizontal 0.4s ease-out forwards',
+                    animationDelay: '0.55s'
+                  }}
+                />
+              </>
+            )}
           </div>
           <div className="max-w-6xl mx-auto relative">
-            <h2 className="text-white font-serif font-bold text-3xl mb-8">
+            <h2 
+              className="text-white font-serif font-bold text-3xl mb-8"
+              style={{ 
+                animation: 'fadeInUp 0.4s ease-out forwards',
+                opacity: 0,
+                animationDelay: '0.25s'
+              }}
+            >
               Selected work
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div ref={workGridRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Work Item 1 - Breakout */}
-              <div className="group">
+              <div 
+                className="group"
+                style={{ 
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.3s'
+                }}
+              >
                 <div className="aspect-[4/3] bg-white mb-4 border border-white/20"></div>
                 <span className="text-white/50 font-mono text-xs uppercase tracking-wider">
                   Our Product
@@ -192,7 +368,14 @@ export default function Page() {
               </div>
 
               {/* Work Item 2 - Placeholder Client Work */}
-              <div className="group">
+              <div 
+                className="group"
+                style={{ 
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.35s'
+                }}
+              >
                 <div className="aspect-[4/3] bg-white mb-4 border border-white/20"></div>
                 <span className="text-white/50 font-mono text-xs uppercase tracking-wider">
                   Client Work
@@ -209,7 +392,14 @@ export default function Page() {
               </div>
 
               {/* Work Item 3 - Placeholder */}
-              <div className="group">
+              <div 
+                className="group"
+                style={{ 
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.4s'
+                }}
+              >
                 <div className="aspect-[4/3] bg-white mb-4 border border-white/20"></div>
                 <span className="text-white/50 font-mono text-xs uppercase tracking-wider">
                   Client Work
@@ -226,7 +416,14 @@ export default function Page() {
               </div>
 
               {/* Work Item 4 - Placeholder */}
-              <div className="group">
+              <div 
+                className="group"
+                style={{ 
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.45s'
+                }}
+              >
                 <div className="aspect-[4/3] bg-white mb-4 border border-white/20"></div>
                 <span className="text-white/50 font-mono text-xs uppercase tracking-wider">
                   Client Work
@@ -256,11 +453,14 @@ export default function Page() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {/* Branding */}
             <div className="space-y-4">
-              <div
-                className="w-16 h-16 border flex items-center justify-center mb-6"
-                style={{ borderColor: `${BLUE}30` }}
-              >
-                <Palette className="w-8 h-8" style={{ color: BLUE }} />
+              <div className="mb-6">
+                <Image
+                  src="/branding-icon.svg"
+                  alt="Branding icon"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12"
+                />
               </div>
               <h3 className="font-serif font-bold text-2xl" style={{ color: DARK_TEXT }}>
                 Brands
@@ -281,11 +481,14 @@ export default function Page() {
 
             {/* Website Design & Dev */}
             <div className="space-y-4">
-              <div
-                className="w-16 h-16 border flex items-center justify-center mb-6"
-                style={{ borderColor: `${BLUE}30` }}
-              >
-                <Globe className="w-8 h-8" style={{ color: BLUE }} />
+              <div className="mb-6">
+                <Image
+                  src="/websites-icon.svg"
+                  alt="Websites icon"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12"
+                />
               </div>
               <h3 className="font-serif font-bold text-2xl" style={{ color: DARK_TEXT }}>
                 Websites
@@ -306,11 +509,14 @@ export default function Page() {
 
             {/* UI/UX */}
             <div className="space-y-4">
-              <div
-                className="w-16 h-16 border flex items-center justify-center mb-6"
-                style={{ borderColor: `${BLUE}30` }}
-              >
-                <Layers className="w-8 h-8" style={{ color: BLUE }} />
+              <div className="mb-6">
+                <Image
+                  src="/uiux-icon.svg"
+                  alt="UI/UX icon"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12"
+                />
               </div>
               <h3 className="font-serif font-bold text-2xl" style={{ color: DARK_TEXT }}>
                 UI/UX
@@ -484,7 +690,7 @@ export default function Page() {
       {/* Ethos - Grey */}
       <section className="px-8 py-16" style={{ backgroundColor: GREY_BG }}>
         <div className="max-w-6xl mx-auto">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto">
             <h2 className="font-serif font-bold text-3xl mb-8" style={{ color: DARK_TEXT }}>
               Our ethos
             </h2>

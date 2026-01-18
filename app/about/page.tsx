@@ -12,18 +12,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PageWrapper>
-      <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
-        <div className="max-w-6xl mx-auto w-full">
-          <h1 className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
-            About
-          </h1>
-          <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed">
-            Our ethos and philosophy on building polite digital products.
-          </p>
-        </div>
-      </section>
-      
-      <div className="px-8 py-16" style={{ backgroundColor: GREY_BG }}>
+      <div className="px-8 py-16 bg-white">
         <div className="max-w-2xl mx-auto">
           <div className="font-mono space-y-12 text-base leading-relaxed" style={{ color: "#0a0033" }}>
             <section className="space-y-6">

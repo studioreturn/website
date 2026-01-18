@@ -7,9 +7,20 @@ import { useState, useEffect } from "react"
 
 export function Navigation() {
   const pathname = usePathname() ?? ""
-  const [isScrolled, setIsScrolled] = useState(false)
+  
+  // Pages that should start with white header (light hero sections)
+  const lightHeroPages = ["/about"]
+  const shouldStartWhite = lightHeroPages.includes(pathname)
+  
+  const [isScrolled, setIsScrolled] = useState(shouldStartWhite)
 
   useEffect(() => {
+    // For light hero pages, always stay white
+    if (shouldStartWhite) {
+      setIsScrolled(true)
+      return
+    }
+
     const boundary = document.querySelector("[data-header-boundary]")
     if (boundary) {
       // Switch to white when the blue section (hero + Selected work) has scrolled out of view
@@ -27,7 +38,7 @@ export function Navigation() {
       return () => observer.disconnect()
     }
 
-    // Fallback on pages without the boundary (e.g. /work, /about)
+    // Fallback on pages without the boundary (e.g. /work)
     const handleScroll = () => {
       const heroHeight = window.innerHeight * 0.8
       setIsScrolled(window.scrollY > heroHeight)
@@ -35,13 +46,12 @@ export function Navigation() {
     window.addEventListener("scroll", handleScroll)
     handleScroll()
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [pathname])
+  }, [pathname, shouldStartWhite])
 
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/services", label: "Services" },
     { href: "/work", label: "Work" },
-    { href: "/industries", label: "Industries" },
     { href: "/about", label: "About" },
     { href: "/lab", label: "Lab" },
   ]
