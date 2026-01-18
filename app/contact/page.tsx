@@ -4,6 +4,9 @@ import type React from "react"
 
 import { PageWrapper } from "@/components/page-wrapper"
 import { useState } from "react"
+import { ArrowRight } from "lucide-react"
+
+const BLUE = "#1100FF"
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({
@@ -37,10 +40,10 @@ export default function ContactPage() {
   if (isSubmitted) {
     return (
       <PageWrapper>
-        <div className="px-8 py-16">
+        <div className="px-8 py-16 min-h-[60vh] flex items-center" style={{ backgroundColor: BLUE }}>
           <div className="max-w-2xl mx-auto text-center">
-            <h1 className="text-white mb-6 text-3xl uppercase font-title">Thanks!</h1>
-            <p className="text-white/70 font-mono text-base leading-relaxed">
+            <h1 className="text-white mb-6 text-3xl md:text-5xl italic tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>Thanks!</h1>
+            <p className="text-white/80 font-mono text-base leading-relaxed">
               We&apos;ve received your message and will get back to you within 2 business days.
             </p>
           </div>
@@ -51,16 +54,22 @@ export default function ContactPage() {
 
   return (
     <PageWrapper>
-      <div className="px-8 py-16">
+      <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
+        <div className="max-w-6xl mx-auto w-full">
+          <h1 className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+            Get in touch
+          </h1>
+          <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed">
+            Got a project in mind? Tell us about it. We&apos;ll get back to you within 2 business days.
+          </p>
+        </div>
+      </section>
+      
+      <div className="px-8 py-16" style={{ backgroundColor: BLUE }}>
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {/* Left Column - Info */}
             <div>
-              <h1 className="text-white mb-6 text-3xl uppercase font-title">Get in touch</h1>
-              <p className="text-white/70 font-mono text-base leading-relaxed mb-8">
-                Got a project in mind? Tell us about it. We&apos;ll get back to you within 2 business days.
-              </p>
-
               <div className="space-y-6 text-white/70 font-mono text-sm">
                 <div>
                   <h3 className="text-white font-bold mb-2">Email</h3>
@@ -189,9 +198,11 @@ export default function ContactPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full px-6 py-4 bg-white text-[#1100FF] font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ color: BLUE }}
                 >
                   {isSubmitting ? "Sending..." : "Send message"}
+                  {!isSubmitting && <ArrowRight className="w-4 h-4" />}
                 </button>
               </form>
             </div>

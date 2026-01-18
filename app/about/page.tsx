@@ -1,6 +1,9 @@
 import { PageWrapper } from "@/components/page-wrapper"
 import type { Metadata } from "next"
 
+const BLUE = "#1100FF"
+const GREY_BG = "#f5f5fa"
+
 export const metadata: Metadata = {
   title: "About - Return",
   description: "Our ethos and philosophy on building polite digital products.",
@@ -9,11 +12,22 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PageWrapper>
-      <div className="px-8 py-16">
+      <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
+        <div className="max-w-6xl mx-auto w-full">
+          <h1 className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+            About
+          </h1>
+          <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed">
+            Our ethos and philosophy on building polite digital products.
+          </p>
+        </div>
+      </section>
+      
+      <div className="px-8 py-16" style={{ backgroundColor: GREY_BG }}>
         <div className="max-w-2xl mx-auto">
-          <div className="text-white font-mono space-y-12 text-base leading-relaxed">
+          <div className="font-mono space-y-12 text-base leading-relaxed" style={{ color: "#0a0033" }}>
             <section className="space-y-6">
-              <p className="mb-6 font-bold">Things weren&apos;t always like this.</p>
+              <p className="mb-6" style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: "1.5rem", fontStyle: "italic" }}>Things weren&apos;t always like this.</p>
               <p className="mb-6">
                 Somewhere along the way, software started misbehaving. The products we use every day stopped solving our
                 problems and started trapping us - designed to hook us, track us, and sell our attention to the highest
@@ -43,7 +57,7 @@ export default function AboutPage() {
             </section>
 
             <section className="space-y-6">
-              <h3 className="font-bold text-base mb-6">Our Ethos</h3>
+              <h3 className="mb-6 italic text-2xl" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>Our Ethos</h3>
               <p className="mb-8">
                 We are driven by a simple philosophy:{" "}
                 <strong>Software should serve the you, the user. Nobody else. </strong> Here are the principles that

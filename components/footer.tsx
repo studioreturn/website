@@ -38,7 +38,7 @@ export function Footer() {
 
           {/* Navigation */}
           <div className="space-y-4">
-            <h4 className="text-white font-mono text-sm font-bold">Navigate</h4>
+            <h4 className="text-white font-mono text-sm font-bold">Pages</h4>
             <div className="flex flex-col gap-2 text-white/70 font-mono text-sm">
               <Link href="/" className="hover:text-white transition-colors">
                 Home
