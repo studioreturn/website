@@ -16,6 +16,15 @@ export default function Page() {
   const workGridRef = useRef<HTMLDivElement>(null)
   const workSectionRef = useRef<HTMLDivElement>(null)
   const [horizontalLinePositions, setHorizontalLinePositions] = useState<number[]>([])
+  
+  // Contact form state
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    message: "",
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   useEffect(() => {
     const calculateLinePositions = () => {
@@ -100,6 +109,50 @@ export default function Page() {
   const phoneNumber = "(+44) 07707 683220"
   const email = "hello@studioreturn.co"
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formState),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to send message')
+      }
+
+      setIsSubmitted(true)
+      setFormState({ name: "", email: "", message: "" })
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setIsSubmitted(false)
+      }, 5000)
+    } catch (error) {
+      console.error('Form submission error:', error)
+      toast({
+        title: "Failed to send message",
+        description: "Please try again or email us directly at hello@studioreturn.co",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormState((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }))
+  }
 
   return (
     <PageWrapper>
@@ -542,7 +595,7 @@ export default function Page() {
       <section className="px-8 py-16" style={{ backgroundColor: GREY_BG }}>
         <div className="max-w-6xl mx-auto">
           <h2 className="font-serif font-bold text-3xl mb-12" style={{ color: DARK_TEXT }}>
-            By designers from
+            By people from
           </h2>
           <div className="flex flex-wrap items-center justify-between gap-16 w-full" style={{ alignItems: 'center' }}>
             {/* Microsoft Logo */}
@@ -729,123 +782,98 @@ export default function Page() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {/* Contact Form */}
             <div className="md:col-span-2">
-              <form className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-white font-mono text-sm mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 font-mono text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-colors"
-                    placeholder="Your name"
-                  />
+              {isSubmitted ? (
+                <div className="py-12 text-center">
+                  <h3 className="text-white font-serif font-bold text-2xl mb-3">Message sent!</h3>
+                  <p className="text-white/70 font-mono text-sm">
+                    Thanks for getting in touch. We&apos;ll get back to you within 2 business days.
+                  </p>
                 </div>
-                <div>
-                  <label htmlFor="email" className="block text-white font-mono text-sm mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 font-mono text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-colors"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="body" className="block text-white font-mono text-sm mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="body"
-                    name="body"
-                    required
-                    rows={6}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 font-mono text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-colors resize-none"
-                    placeholder="Tell us about your project..."
-                  />
-                </div>
-                <div className="flex gap-4">
-                  <button
-                    type="submit"
-                    className="px-8 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors"
-                    style={{ color: BLUE }}
-                  >
-                    Send message
-                  </button>
-                  <a
-                    href="https://calendly.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold hover:bg-white/10 transition-colors"
-                  >
-                    Schedule a call
-                    <ArrowUpRight className="w-4 h-4" />
-                  </a>
-                </div>
-              </form>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="name" className="block text-white font-mono text-sm mb-2">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      value={formState.name || ""}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 font-mono text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-colors disabled:opacity-50"
+                      placeholder="Your name"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-white font-mono text-sm mb-2">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      value={formState.email || ""}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 font-mono text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-colors disabled:opacity-50"
+                      placeholder="your.email@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="message" className="block text-white font-mono text-sm mb-2">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      required
+                      rows={6}
+                      value={formState.message || ""}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 font-mono text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-colors resize-none disabled:opacity-50"
+                      placeholder="Tell us about your project..."
+                    />
+                  </div>
+                  <div className="flex gap-4">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="px-8 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{ color: BLUE }}
+                    >
+                      {isSubmitting ? "Sending..." : "Send message"}
+                    </button>
+                    <a
+                      href="https://calendly.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold hover:bg-white/10 transition-colors"
+                    >
+                      Schedule a call
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </form>
+              )}
             </div>
 
             {/* Contact Details */}
             <div>
               <div className="space-y-4 text-white/80 font-mono text-sm">
                 <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <label className="block text-white font-mono text-sm">Address</label>
-                    <button
-                      type="button"
-                      onClick={() => copyToClipboard(fullAddress, "address")}
-                      className="text-white/70 hover:text-white transition-colors"
-                      title="Copy address"
-                    >
-                      <Copy className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                  <div className="text-white/80">
+                  <label className="block text-white font-mono text-sm mb-2">Phone</label>
+                  <div className="flex items-center gap-2">
                     <a
-                      href={googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-white/90 transition-colors no-underline inline-block"
+                      href={`tel:${phoneNumber.replace(/[()\s]/g, "")}`}
+                      className="text-white/80 hover:text-white/90 transition-colors no-underline inline-block"
                     >
-                      Studio 51, Spike Island
+                      {phoneNumber}
                     </a>
-                    <br />
-                    <a
-                      href={googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-white/90 transition-colors no-underline inline-block"
-                    >
-                      133 Cumberland Road
-                    </a>
-                    <br />
-                    <a
-                      href={googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-white/90 transition-colors no-underline inline-block"
-                    >
-                      Bristol
-                    </a>
-                    <br />
-                    <a
-                      href={googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-white/90 transition-colors no-underline inline-block"
-                    >
-                      BS1 6UX
-                    </a>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <label className="block text-white font-mono text-sm">Phone</label>
                     <button
                       type="button"
                       onClick={() => copyToClipboard(phoneNumber, "phone")}
@@ -855,16 +883,16 @@ export default function Page() {
                       <Copy className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                  <a
-                    href={`tel:${phoneNumber.replace(/[()\s]/g, "")}`}
-                    className="text-white/80 hover:text-white/90 transition-colors no-underline inline-block"
-                  >
-                    {phoneNumber}
-                  </a>
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <label className="block text-white font-mono text-sm">Email</label>
+                  <label className="block text-white font-mono text-sm mb-2">Email</label>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={`mailto:${email}`}
+                      className="text-white/80 hover:text-white/90 transition-colors no-underline inline-block"
+                    >
+                      {email}
+                    </a>
                     <button
                       type="button"
                       onClick={() => copyToClipboard(email, "email")}
@@ -874,12 +902,11 @@ export default function Page() {
                       <Copy className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                  <a
-                    href={`mailto:${email}`}
-                    className="text-white/80 hover:text-white/90 transition-colors no-underline inline-block"
-                  >
-                    {email}
-                  </a>
+                </div>
+                <div className="pt-4 border-t border-white/10">
+                  <p className="text-white leading-relaxed">
+                    Based in Bristol? Let us know and we can chat over a coffee instead :)
+                  </p>
                 </div>
               </div>
             </div>
