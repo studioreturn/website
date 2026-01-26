@@ -99,7 +99,7 @@ export default function ContactPage() {
 
   return (
     <PageWrapper>
-      <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
+      <section className="px-4 md:px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto w-full">
           <h1 
             className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" 
@@ -113,7 +113,7 @@ export default function ContactPage() {
             Get in touch
           </h1>
           <p 
-            className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed"
+            className="text-white/80 font-mono text-lg md:text-xl md:max-w-[calc(50%-3rem)] leading-relaxed"
             style={{
               animation: 'fadeInUp 0.4s ease-out forwards',
               opacity: 0,
@@ -176,11 +176,11 @@ export default function ContactPage() {
                     placeholder="Tell us about your project..."
                   />
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-4">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-8 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-8 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-center"
                     style={{ color: BLUE }}
                   >
                     {isSubmitting ? "Sending..." : "Send message"}
@@ -189,10 +189,10 @@ export default function ContactPage() {
                     href="https://calendly.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold hover:bg-white/10 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold hover:bg-white/10 transition-colors whitespace-nowrap"
                   >
                     Schedule a call
-                    <ArrowUpRight className="w-4 h-4" />
+                    <ArrowUpRight className="w-5 h-5" />
                   </a>
                 </div>
               </form>

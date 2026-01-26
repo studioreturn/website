@@ -16,6 +16,7 @@ export default function Page() {
   const workGridRef = useRef<HTMLDivElement>(null)
   const workSectionRef = useRef<HTMLDivElement>(null)
   const [horizontalLinePositions, setHorizontalLinePositions] = useState<number[]>([])
+  const [isMobile, setIsMobile] = useState(false)
   
   // Contact form state
   const [formState, setFormState] = useState({
@@ -25,6 +26,19 @@ export default function Page() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768) // md breakpoint
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
+  }, [])
 
   useEffect(() => {
     const calculateLinePositions = () => {
@@ -37,36 +51,52 @@ export default function Page() {
       const groups = grid.querySelectorAll('.group')
       if (groups.length < 4) return
 
-      // Grid is 2 columns, so:
-      // Row 1: groups[0] (left), groups[1] (right)
-      // Row 2: groups[2] (left), groups[3] (right)
-      const firstRowLeft = groups[0] as HTMLElement
-      const firstRowRight = groups[1] as HTMLElement
-      const secondRowLeft = groups[2] as HTMLElement
-      const secondRowRight = groups[3] as HTMLElement
-      
-      // Get the thumbnail divs (first child of each group - the aspect-[4/3] div)
-      const firstRowLeftThumb = firstRowLeft.firstElementChild as HTMLElement
-      const firstRowRightThumb = firstRowRight.firstElementChild as HTMLElement
-      const secondRowLeftThumb = secondRowLeft.firstElementChild as HTMLElement
-      const secondRowRightThumb = secondRowRight.firstElementChild as HTMLElement
-      
-      if (!firstRowLeftThumb || !firstRowRightThumb || !secondRowLeftThumb || !secondRowRightThumb) return
-      
       const sectionRect = section.getBoundingClientRect()
-      const firstRowLeftRect = firstRowLeftThumb.getBoundingClientRect()
-      const firstRowRightRect = firstRowRightThumb.getBoundingClientRect()
-      const secondRowLeftRect = secondRowLeftThumb.getBoundingClientRect()
-      const secondRowRightRect = secondRowRightThumb.getBoundingClientRect()
+      const isMobileLayout = window.innerWidth < 768
       
-      // Calculate positions relative to the section (where grid lines container is positioned)
-      // Four lines: top and bottom of each row
-      const topOfFirstRow = firstRowLeftRect.top - sectionRect.top
-      const bottomOfFirstRow = Math.max(firstRowLeftRect.bottom, firstRowRightRect.bottom) - sectionRect.top
-      const topOfSecondRow = secondRowLeftRect.top - sectionRect.top
-      const bottomOfSecondRow = Math.max(secondRowLeftRect.bottom, secondRowRightRect.bottom) - sectionRect.top
-      
-      setHorizontalLinePositions([topOfFirstRow, bottomOfFirstRow, topOfSecondRow, bottomOfSecondRow])
+      if (isMobileLayout) {
+        // Mobile: 1 column, so each item gets its own row
+        // We need 8 lines: top and bottom of each of the 4 items
+        const positions: number[] = []
+        groups.forEach((group) => {
+          const thumb = group.firstElementChild as HTMLElement
+          if (!thumb) return
+          const thumbRect = thumb.getBoundingClientRect()
+          positions.push(thumbRect.top - sectionRect.top) // Top of item
+          positions.push(thumbRect.bottom - sectionRect.top) // Bottom of item
+        })
+        setHorizontalLinePositions(positions)
+      } else {
+        // Desktop: 2 columns
+        // Row 1: groups[0] (left), groups[1] (right)
+        // Row 2: groups[2] (left), groups[3] (right)
+        const firstRowLeft = groups[0] as HTMLElement
+        const firstRowRight = groups[1] as HTMLElement
+        const secondRowLeft = groups[2] as HTMLElement
+        const secondRowRight = groups[3] as HTMLElement
+        
+        // Get the thumbnail divs (first child of each group - the aspect-[4/3] div)
+        const firstRowLeftThumb = firstRowLeft.firstElementChild as HTMLElement
+        const firstRowRightThumb = firstRowRight.firstElementChild as HTMLElement
+        const secondRowLeftThumb = secondRowLeft.firstElementChild as HTMLElement
+        const secondRowRightThumb = secondRowRight.firstElementChild as HTMLElement
+        
+        if (!firstRowLeftThumb || !firstRowRightThumb || !secondRowLeftThumb || !secondRowRightThumb) return
+        
+        const firstRowLeftRect = firstRowLeftThumb.getBoundingClientRect()
+        const firstRowRightRect = firstRowRightThumb.getBoundingClientRect()
+        const secondRowLeftRect = secondRowLeftThumb.getBoundingClientRect()
+        const secondRowRightRect = secondRowRightThumb.getBoundingClientRect()
+        
+        // Calculate positions relative to the section (where grid lines container is positioned)
+        // Four lines: top and bottom of each row
+        const topOfFirstRow = firstRowLeftRect.top - sectionRect.top
+        const bottomOfFirstRow = Math.max(firstRowLeftRect.bottom, firstRowRightRect.bottom) - sectionRect.top
+        const topOfSecondRow = secondRowLeftRect.top - sectionRect.top
+        const bottomOfSecondRow = Math.max(secondRowLeftRect.bottom, secondRowRightRect.bottom) - sectionRect.top
+        
+        setHorizontalLinePositions([topOfFirstRow, bottomOfFirstRow, topOfSecondRow, bottomOfSecondRow])
+      }
     }
 
     // Wait for layout to settle, try multiple times to ensure elements are rendered
@@ -159,12 +189,42 @@ export default function Page() {
       {/* Hero + Selected Work - Combined */}
       <section data-header-boundary className="relative" style={{ backgroundColor: BLUE }}>
         <div
-          className="px-8 min-h-[48vh] flex items-center relative"
+          className="px-4 md:px-8 min-h-[48vh] flex items-center relative"
           style={{ backgroundColor: BLUE }}
         >
           {/* Grid lines for hero section */}
-          <div className="hidden md:block absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-            <div className="max-w-6xl mx-auto h-full relative px-8">
+          <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+            {/* Mobile: Simple vertical lines */}
+            <div className="md:hidden max-w-6xl mx-auto h-full relative px-8">
+              <div 
+                className="absolute top-0 bottom-0"
+                style={{ 
+                  left: '-1px',
+                  width: '1px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.1s'
+                }}
+              />
+              <div 
+                className="absolute top-0 bottom-0"
+                style={{ 
+                  right: '-1px',
+                  width: '1px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.15s'
+                }}
+              />
+            </div>
+            
+            {/* Desktop: Full grid */}
+            <div className="hidden md:block absolute inset-0 pointer-events-none">
+              <div className="max-w-6xl mx-auto h-full relative px-8">
               {/* Left edge of first column */}
               <div 
                 className="absolute top-0 bottom-0"
@@ -217,6 +277,7 @@ export default function Page() {
                   animationDelay: '0.15s'
                 }}
               />
+              </div>
             </div>
           </div>
           <div className="max-w-6xl mx-auto w-full">
@@ -231,7 +292,7 @@ export default function Page() {
               RETURN
             </h1>
             <p 
-              className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed mb-6"
+              className="text-white/80 font-mono text-lg md:text-xl md:max-w-[calc(50%-3rem)] leading-relaxed mb-6"
               style={{ 
                 animation: 'fadeInUp 0.4s ease-out forwards',
                 opacity: 0,
@@ -247,7 +308,7 @@ export default function Page() {
                   e.preventDefault()
                   document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
                 }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-white font-mono text-sm font-bold hover:bg-white/90 transition-colors"
                 style={{ 
                   color: BLUE,
                   animation: 'fadeInUp 0.4s ease-out forwards',
@@ -273,11 +334,41 @@ export default function Page() {
           </div>
         </div>
 
-        <div ref={workSectionRef} className="px-8 pt-10 pb-12 relative" style={{ backgroundColor: BLUE }}>
+        <div ref={workSectionRef} className="px-4 md:px-8 pt-10 pb-12 relative" style={{ backgroundColor: BLUE }}>
           {/* Grid lines for selected work section */}
-          <div className="hidden md:block absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-            {/* Vertical lines - constrained to content width */}
-            <div className="max-w-6xl mx-auto h-full relative px-8">
+          <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+            {/* Mobile: Two vertical lines, full width */}
+            <div className="md:hidden absolute inset-0">
+              <div 
+                className="absolute top-0 bottom-0"
+                style={{ 
+                  left: '1rem',
+                  width: '1px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.25s'
+                }}
+              />
+              <div 
+                className="absolute top-0 bottom-0"
+                style={{ 
+                  right: '1rem',
+                  width: '1px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  zIndex: 0,
+                  opacity: 0,
+                  animation: 'drawVertical 0.4s ease-out forwards',
+                  animationDelay: '0.3s'
+                }}
+              />
+            </div>
+            
+            {/* Desktop: Full grid */}
+            <div className="hidden md:block absolute inset-0 pointer-events-none">
+              {/* Vertical lines - constrained to content width */}
+              <div className="max-w-6xl mx-auto h-full relative px-8">
               {/* Left edge of first column */}
               <div 
                 className="absolute top-0 bottom-0"
@@ -331,62 +422,27 @@ export default function Page() {
                 }}
               />
             </div>
+            </div>
             
             {/* Horizontal lines - full width, aligned with work thumbnails */}
-            {horizontalLinePositions.length >= 4 && (
+            {/* Mobile: 8 lines (top and bottom of each item), Desktop: 4 lines (top and bottom of each row) */}
+            {horizontalLinePositions.length > 0 && (
               <>
-                {/* Top of first row */}
-                <div 
-                  className="absolute left-0 right-0"
-                  style={{ 
-                    top: `${horizontalLinePositions[0]}px`,
-                    height: '1px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                    zIndex: 0,
-                    opacity: 0,
-                    animation: 'drawHorizontal 0.4s ease-out forwards',
-                    animationDelay: '0.4s'
-                  }}
-                />
-                {/* Bottom of first row */}
-                <div 
-                  className="absolute left-0 right-0"
-                  style={{ 
-                    top: `${horizontalLinePositions[1]}px`,
-                    height: '1px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                    zIndex: 0,
-                    opacity: 0,
-                    animation: 'drawHorizontal 0.4s ease-out forwards',
-                    animationDelay: '0.45s'
-                  }}
-                />
-                {/* Top of second row */}
-                <div 
-                  className="absolute left-0 right-0"
-                  style={{ 
-                    top: `${horizontalLinePositions[2]}px`,
-                    height: '1px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                    zIndex: 0,
-                    opacity: 0,
-                    animation: 'drawHorizontal 0.4s ease-out forwards',
-                    animationDelay: '0.5s'
-                  }}
-                />
-                {/* Bottom of second row */}
-                <div 
-                  className="absolute left-0 right-0"
-                  style={{ 
-                    top: `${horizontalLinePositions[3]}px`,
-                    height: '1px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                    zIndex: 0,
-                    opacity: 0,
-                    animation: 'drawHorizontal 0.4s ease-out forwards',
-                    animationDelay: '0.55s'
-                  }}
-                />
+                {horizontalLinePositions.map((position, index) => (
+                  <div 
+                    key={index}
+                    className="absolute left-0 right-0"
+                    style={{ 
+                      top: `${position}px`,
+                      height: '1px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      zIndex: 0,
+                      opacity: 0,
+                      animation: 'drawHorizontal 0.4s ease-out forwards',
+                      animationDelay: `${0.4 + index * 0.05}s`
+                    }}
+                  />
+                ))}
               </>
             )}
           </div>
@@ -581,7 +637,7 @@ export default function Page() {
       </section>
 
       {/* Services - White */}
-      <section className="px-8 py-16 bg-white">
+      <section className="px-4 md:px-8 py-8 md:py-16 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="font-serif font-bold text-3xl mb-12" style={{ color: DARK_TEXT }}>
             What we do
@@ -660,15 +716,15 @@ export default function Page() {
       </section>
 
       {/* Client Logos - Grey */}
-      <section className="px-8 py-16" style={{ backgroundColor: GREY_BG }}>
+      <section className="px-4 md:px-8 py-8 md:py-16" style={{ backgroundColor: GREY_BG }}>
         <div className="max-w-6xl mx-auto">
           <h2 className="font-serif font-bold text-3xl mb-12" style={{ color: DARK_TEXT }}>
             By people from
           </h2>
-          <div className="flex flex-wrap items-center justify-between gap-16 w-full" style={{ alignItems: 'center' }}>
+          <div className="flex flex-col md:flex-row md:flex-wrap md:items-center md:justify-between gap-8 md:gap-16 w-full">
             {/* Microsoft Logo */}
-            <div className="flex-1 min-w-[20px] flex items-center justify-center">
-              <svg viewBox="0 0 337.6 72" className="h-12 w-auto max-w-[150px]" fill="none">
+            <div className="w-full md:flex-1 md:min-w-[20px] flex items-center justify-center">
+              <svg viewBox="0 0 337.6 72" className="h-10 md:h-12 w-auto md:max-w-[150px]" fill="none">
                 <path fill={`${DARK_TEXT}80`} d="M140.4,14.4v43.2h-7.5V23.7h-0.1l-13.4,33.9h-5l-13.7-33.9h-0.1v33.9h-6.9V14.4h10.8l12.4,32h0.2l13.1-32H140.4 z M146.6,17.7c0-1.2,0.4-2.2,1.3-3c0.9-0.8,1.9-1.2,3.1-1.2c1.3,0,2.4,0.4,3.2,1.2s1.3,1.8,1.3,3c0,1.2-0.4,2.2-1.3,3 c-0.9,0.8-1.9,1.2-3.2,1.2s-2.3-0.4-3.1-1.2C147.1,19.8,146.6,18.8,146.6,17.7z M154.7,26.6v31h-7.3v-31H154.7z M176.8,52.3 c1.1,0,2.3-0.2,3.6-0.8c1.3-0.5,2.5-1.2,3.6-2v6.8c-1.2,0.7-2.5,1.2-4,1.5c-1.5,0.3-3.1,0.5-4.9,0.5c-4.6,0-8.3-1.4-11.1-4.3 c-2.9-2.9-4.3-6.6-4.3-11c0-5,1.5-9.1,4.4-12.3c2.9-3.2,7-4.8,12.4-4.8c1.4,0,2.8,0.2,4.1,0.5c1.4,0.3,2.5,0.8,3.3,1.2v7 c-1.1-0.8-2.3-1.5-3.4-1.9c-1.2-0.4-2.4-0.7-3.6-0.7c-2.9,0-5.2,0.9-7,2.8s-2.6,4.4-2.6,7.6c0,3.1,0.9,5.6,2.6,7.3 C171.6,51.4,173.9,52.3,176.8,52.3z M204.7,26.1c0.6,0,1.1,0,1.6,0.1s0.9,0.2,1.2,0.3v7.4c-0.4-0.3-0.9-0.6-1.7-0.8 s-1.6-0.4-2.7-0.4c-1.8,0-3.3,0.8-4.5,2.3s-1.9,3.8-1.9,7v15.6h-7.3v-31h7.3v4.9h0.1c0.7-1.7,1.7-3,3-4 C201.2,26.6,202.8,26.1,204.7,26.1z M207.9,42.6c0-5.1,1.5-9.2,4.3-12.2c2.9-3,6.9-4.5,12-4.5c4.8,0,8.6,1.4,11.3,4.3 s4.1,6.8,4.1,11.7c0,5-1.5,9-4.3,12c-2.9,3-6.8,4.5-11.8,4.5c-4.8,0-8.6-1.4-11.4-4.2C209.3,51.3,207.9,47.4,207.9,42.6z M215.5,42.3c0,3.2,0.7,5.7,2.2,7.4s3.6,2.6,6.3,2.6c2.6,0,4.7-0.8,6.1-2.6c1.4-1.7,2.1-4.2,2.1-7.6c0-3.3-0.7-5.8-2.1-7.6 c-1.4-1.7-3.5-2.6-6-2.6c-2.7,0-4.7,0.9-6.2,2.7C216.2,36.5,215.5,39,215.5,42.3z M250.5,34.8c0,1,0.3,1.9,1,2.5 c0.7,0.6,2.1,1.3,4.4,2.2c2.9,1.2,5,2.5,6.1,3.9c1.2,1.5,1.8,3.2,1.8,5.3c0,2.9-1.1,5.2-3.4,7c-2.2,1.8-5.3,2.6-9.1,2.6 c-1.3,0-2.7-0.2-4.3-0.5c-1.6-0.3-2.9-0.7-4-1.2v-7.2c1.3,0.9,2.8,1.7,4.3,2.2c1.5,0.5,2.9,0.8,4.2,0.8c1.6,0,2.9-0.2,3.6-0.7 c0.8-0.5,1.2-1.2,1.2-2.3c0-1-0.4-1.8-1.2-2.6c-0.8-0.7-2.4-1.5-4.6-2.4c-2.7-1.1-4.6-2.4-5.7-3.8s-1.7-3.2-1.7-5.4 c0-2.8,1.1-5.1,3.3-6.9c2.2-1.8,5.1-2.7,8.6-2.7c1.1,0,2.3,0.1,3.6,0.4s2.5,0.6,3.4,0.9V34c-1-0.6-2.1-1.2-3.4-1.7 c-1.3-0.5-2.6-0.7-3.8-0.7c-1.4,0-2.5,0.3-3.2,0.8C250.9,33.1,250.5,33.8,250.5,34.8z M266.9,42.6c0-5.1,1.5-9.2,4.3-12.2 c2.9-3,6.9-4.5,12-4.5c4.8,0,8.6,1.4,11.3,4.3s4.1,6.8,4.1,11.7c0,5-1.5,9-4.3,12c-2.9,3-6.8,4.5-11.8,4.5c-4.8,0-8.6-1.4-11.4-4.2 C268.4,51.3,266.9,47.4,266.9,42.6z M274.5,42.3c0,3.2,0.7,5.7,2.2,7.4s3.6,2.6,6.3,2.6c2.6,0,4.7-0.8,6.1-2.6 c1.4-1.7,2.1-4.2,2.1-7.6c0-3.3-0.7-5.8-2.1-7.6c-1.4-1.7-3.5-2.6-6-2.6c-2.7,0-4.7,0.9-6.2,2.7C275.3,36.5,274.5,39,274.5,42.3z M322.9,32.6h-10.9v25h-7.4v-25h-5.2v-6h5.2v-4.3c0-3.2,1.1-5.9,3.2-8s4.8-3.1,8.1-3.1c0.9,0,1.7,0.1,2.4,0.1s1.3,0.2,1.8,0.4v6.3 c-0.2-0.1-0.7-0.3-1.3-0.5c-0.6-0.2-1.3-0.3-2.1-0.3c-1.5,0-2.7,0.5-3.5,1.4c-0.8,0.9-1.2,2.4-1.2,4.2v3.7h10.9v-7l7.3-2.2v9.2h7.4 v6h-7.4v14.5c0,1.9,0.4,3.2,1,4c0.7,0.8,1.8,1.2,3.3,1.2c0.4,0,0.9-0.1,1.5-0.3c0.6-0.2,1.1-0.4,1.5-0.7v6c-0.5,0.3-1.2,0.5-2.3,0.7 c-1.1,0.2-2.1,0.3-3.2,0.3c-3.1,0-5.4-0.8-6.9-2.4c-1.5-1.6-2.3-4.1-2.3-7.4L322.9,32.6L322.9,32.6z" />
                 <rect fill={`${DARK_TEXT}80`} width="34.2" height="34.2" />
                 <rect fill={`${DARK_TEXT}80`} x="37.8" width="34.2" height="34.2" />
@@ -678,8 +734,8 @@ export default function Page() {
             </div>
 
             {/* Ravelin Logo */}
-            <div className="flex-1 min-w-[20px] flex items-center justify-center">
-              <svg viewBox="0 0 159.1 45" className="h-12 w-auto max-w-[150px]" fill="none">
+            <div className="w-full md:flex-1 md:min-w-[20px] flex items-center justify-center">
+              <svg viewBox="0 0 159.1 45" className="h-10 md:h-12 w-auto md:max-w-[150px]" fill="none">
                 <style>{`.st0,.st1{fill:${DARK_TEXT}80}`}</style>
                 <g>
                   <g id="ravelinSvg" transform="translate(49.635 7.122)">
@@ -702,8 +758,8 @@ export default function Page() {
             </div>
 
             {/* Deloitte Logo */}
-            <div className="flex-1 min-w-[20px] flex items-center justify-center">
-              <svg viewBox="13.8 14.75 892.4 170.5" className="h-12 w-auto max-w-[150px]" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="w-full md:flex-1 md:min-w-[20px] flex items-center justify-center">
+              <svg viewBox="13.8 14.75 892.4 170.5" className="h-10 md:h-12 w-auto md:max-w-[150px]" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g transform="translate(-2521.9698,-654.34261)">
                   <g transform="matrix(3.0676446,0,0,3.0676446,-6165.655,-2195.369)">
                     <g transform="matrix(1.7716542,0,0,1.7716542,-2301.0501,-745.37663)">
@@ -724,8 +780,8 @@ export default function Page() {
             </div>
 
             {/* OakNorth Bank Logo */}
-            <div className="flex-1 min-w-[20px] flex items-center justify-center">
-              <svg viewBox="0 0 190 50" className="h-12 w-auto max-w-[150px]" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="w-full md:flex-1 md:min-w-[20px] flex items-center justify-center">
+              <svg viewBox="0 0 190 50" className="h-10 md:h-12 w-auto md:max-w-[150px]" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clipPath="url(#clip0_413_8550)">
                   <mask id="mask0_413_8550" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="14" width="130" height="22">
                     <path d="M130 14H0V35.9027H130V14Z" fill="white"/>
@@ -749,8 +805,8 @@ export default function Page() {
             </div>
 
             {/* Beamery Logo */}
-            <div className="flex-1 min-w-[20px] flex items-center justify-center">
-              <svg viewBox="0 0 317.3 70" className="h-12 w-auto max-w-[150px]" fill="none">
+            <div className="hidden md:flex md:flex-1 md:min-w-[20px] md:items-center md:justify-center">
+              <svg viewBox="0 0 317.3 70" className="h-10 md:h-12 w-auto md:max-w-[150px]" fill="none">
                 <style>{`.st0,.st1{fill:${DARK_TEXT}80}`}</style>
                 <g>
                   <g transform="translate(42.729 7.225)">
@@ -932,11 +988,11 @@ export default function Page() {
                       placeholder="Tell us about your project..."
                     />
                   </div>
-                  <div className="flex gap-4">
+                  <div className="flex flex-col gap-4">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-8 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-8 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-center"
                       style={{ color: BLUE }}
                     >
                       {isSubmitting ? "Sending..." : "Send message"}
@@ -945,10 +1001,10 @@ export default function Page() {
                       href="https://calendly.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold hover:bg-white/10 transition-colors"
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold hover:bg-white/10 transition-colors whitespace-nowrap"
                     >
                       Schedule a call
-                      <ArrowUpRight className="w-4 h-4" />
+                      <ArrowUpRight className="w-5 h-5" />
                     </a>
                   </div>
                 </form>

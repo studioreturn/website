@@ -146,7 +146,7 @@ export default function ServicesPage() {
 
   return (
     <PageWrapper>
-      <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
+      <section className="px-4 md:px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto w-full">
           <h1 
             className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" 
@@ -160,7 +160,7 @@ export default function ServicesPage() {
             Services
           </h1>
           <p 
-            className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed"
+            className="text-white/80 font-mono text-lg md:text-xl md:max-w-[calc(50%-3rem)] leading-relaxed"
             style={{
               animation: 'fadeInUp 0.4s ease-out forwards',
               opacity: 0,
@@ -173,7 +173,7 @@ export default function ServicesPage() {
       </section>
       
       {/* Website Design & Development Section */}
-      <section ref={websiteSectionRef} id="websites" className="px-8 py-16 scroll-mt-24 bg-white">
+      <section ref={websiteSectionRef} id="websites" className="px-4 md:px-8 py-8 md:py-16 scroll-mt-24 bg-white">
         <div className="max-w-6xl mx-auto scroll-animate">
           <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>Website Design & Development</h2>
           <p className="font-mono text-sm leading-relaxed mb-12 max-w-3xl" style={{ color: `${DARK_TEXT}80` }}>
@@ -363,7 +363,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Branding Section */}
-      <section ref={brandingSectionRef} id="branding" className="px-8 py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
+      <section ref={brandingSectionRef} id="branding" className="px-4 md:px-8 py-8 md:py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
         <div className="max-w-6xl mx-auto scroll-animate">
           <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>Branding</h2>
           <p className="font-mono text-sm leading-relaxed mb-12 max-w-3xl" style={{ color: `${DARK_TEXT}80` }}>
@@ -459,7 +459,7 @@ export default function ServicesPage() {
       </section>
 
       {/* UI/UX Section */}
-      <section ref={uiuxSectionRef} id="ui-ux" className="px-8 py-16 scroll-mt-24 bg-white">
+      <section ref={uiuxSectionRef} id="ui-ux" className="px-4 md:px-8 py-8 md:py-16 scroll-mt-24 bg-white">
         <div className="max-w-6xl mx-auto scroll-animate">
           <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>UI/UX Design</h2>
           <p className="font-mono text-sm leading-relaxed mb-12 max-w-3xl" style={{ color: `${DARK_TEXT}80` }}>
@@ -633,7 +633,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Packages Section */}
-      <section ref={packagesSectionRef} id="packages" className="px-8 py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
+      <section ref={packagesSectionRef} id="packages" className="px-4 md:px-8 py-8 md:py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
         <div className="max-w-6xl mx-auto scroll-animate">
           <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>Packages</h2>
           <p className="font-mono text-sm leading-relaxed max-w-2xl mb-12" style={{ color: `${DARK_TEXT}80` }}>
@@ -773,11 +773,11 @@ export default function ServicesPage() {
                       placeholder="Tell us about your project..."
                     />
                   </div>
-                  <div className="flex gap-4">
+                  <div className="flex flex-col gap-4">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-8 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-8 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-center"
                       style={{ color: BLUE }}
                     >
                       {isSubmitting ? "Sending..." : "Send message"}
@@ -786,10 +786,10 @@ export default function ServicesPage() {
                       href="https://calendly.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold hover:bg-white/10 transition-colors"
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold hover:bg-white/10 transition-colors whitespace-nowrap"
                     >
                       Schedule a call
-                      <ArrowUpRight className="w-4 h-4" />
+                      <ArrowUpRight className="w-5 h-5" />
                     </a>
                   </div>
                 </form>

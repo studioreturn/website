@@ -9,7 +9,7 @@ const DARK_TEXT = "#0a0033"
 export default function CareersPage() {
   return (
     <PageWrapper>
-      <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
+      <section className="px-4 md:px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto w-full">
           <h1 
             className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" 
@@ -23,7 +23,7 @@ export default function CareersPage() {
             Careers
           </h1>
           <p 
-            className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed"
+            className="text-white/80 font-mono text-lg md:text-xl md:max-w-[calc(50%-3rem)] leading-relaxed"
             style={{
               animation: 'fadeInUp 0.4s ease-out forwards',
               opacity: 0,

@@ -29,7 +29,7 @@ const cormorantGaramond = Cormorant_Garamond({
 })
 
 export const metadata: Metadata = {
-  title: "Studio Return - Digital design studio in Bristol, UK",
+  title: "Studio Return - Digital Design Studio in Bristol, UK",
   description: "Polite products from Bristol, UK",
   generator: "v0.app",
   icons: {

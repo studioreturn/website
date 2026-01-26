@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
 
 export function Navigation() {
@@ -13,8 +13,12 @@ export function Navigation() {
   const shouldStartWhite = lightHeroPages.includes(pathname)
   
   const [isScrolled, setIsScrolled] = useState(shouldStartWhite)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
+    // Close mobile menu when route changes
+    setIsMobileMenuOpen(false)
+    
     // For light hero pages, always stay white
     if (shouldStartWhite) {
       setIsScrolled(true)
@@ -58,7 +62,7 @@ export function Navigation() {
 
   return (
     <nav
-      className="w-full py-6 px-8 sticky top-0 z-50 transition-all duration-300"
+      className="w-full py-4 md:py-6 px-4 md:px-8 sticky top-0 z-50 transition-all duration-300"
       style={{
         backgroundColor: isScrolled ? "#ffffff" : "#1100FF",
         borderBottom: isScrolled
@@ -82,7 +86,8 @@ export function Navigation() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-8">
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-8">
           <div
             className="flex items-center gap-8 font-mono text-sm transition-colors duration-300"
             style={{ color: isScrolled ? "#1100FF" : "#ffffff" }}
@@ -136,6 +141,92 @@ export function Navigation() {
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden p-2 transition-opacity hover:opacity-70"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6" style={{ color: isScrolled ? "#1100FF" : "#ffffff" }} />
+          ) : (
+            <Menu className="w-6 h-6" style={{ color: isScrolled ? "#1100FF" : "#ffffff" }} />
+          )}
+        </button>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-40 md:hidden bg-black/20"
+              onClick={() => setIsMobileMenuOpen(false)}
+              style={{ top: "65px" }}
+            />
+            <div
+              className="fixed z-50 md:hidden w-full left-0 right-0"
+              style={{
+                backgroundColor: isScrolled ? "#ffffff" : "#1100FF",
+                top: "65px",
+                maxHeight: "calc(100vh - 65px)",
+                overflowY: "auto"
+              }}
+            >
+              <div className="px-4 py-8 flex flex-col gap-6">
+              {navItems.map((item) => {
+                const isLabs = item.href === "/labs"
+                
+                if (isLabs) {
+                  return (
+                    <span
+                      key={item.href}
+                      className="inline-flex items-center gap-2 opacity-60 cursor-not-allowed font-mono text-base"
+                      style={{ color: isScrolled ? "#1100FF" : "#ffffff" }}
+                    >
+                      {item.label}
+                      <span
+                        className="text-xs px-2 py-0.5 rounded-full font-mono opacity-80"
+                        style={{
+                          backgroundColor: isScrolled ? "rgba(17, 0, 255, 0.15)" : "rgba(255, 255, 255, 0.3)",
+                          color: isScrolled ? "#1100FF" : "#ffffff",
+                        }}
+                      >
+                        Coming Soon
+                      </span>
+                    </span>
+                  )
+                }
+                
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`font-mono text-base transition-opacity ${
+                      pathname === item.href ? "underline underline-offset-4" : "hover:opacity-70"
+                    }`}
+                    style={{ color: isScrolled ? "#1100FF" : "#ffffff" }}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              })}
+              <Link
+                href="/contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-2 px-5 py-2.5 font-mono text-sm font-bold transition-colors duration-300 mt-4"
+                style={{
+                  backgroundColor: isScrolled ? "#1100FF" : "#ffffff",
+                  color: isScrolled ? "#ffffff" : "#1100FF",
+                }}
+              >
+                Contact
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </nav>
   )
