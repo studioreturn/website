@@ -99,7 +99,7 @@ export function Footer() {
                 Work
               </Link>
               <Link href="/about" className="hover:text-white transition-colors">
-                About
+                Ethos
               </Link>
               <span className="inline-flex items-center gap-2 opacity-40 cursor-not-allowed">
                 Labs

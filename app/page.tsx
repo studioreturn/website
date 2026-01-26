@@ -328,7 +328,7 @@ export default function Page() {
                   animationDelay: '0.25s'
                 }}
               >
-                Our ethos
+                Ethos
               </Link>
             </div>
           </div>
@@ -896,7 +896,7 @@ export default function Page() {
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl">
             <h2 className="font-serif font-bold text-3xl mb-8" style={{ color: DARK_TEXT }}>
-              Our ethos
+              Ethos
             </h2>
 
             <p className="font-mono text-lg leading-relaxed mb-6" style={{ color: DARK_TEXT }}>

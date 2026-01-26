@@ -92,7 +92,7 @@ export default function AboutPage() {
                   animationDelay: '0.2s'
                 }}
               >
-                Our Ethos
+                Ethos
               </h3>
               <p 
                 className="mb-8"
