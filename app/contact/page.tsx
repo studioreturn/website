@@ -176,7 +176,7 @@ export default function ContactPage() {
                     placeholder="Tell us about your project..."
                   />
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col md:flex-row gap-4">
                   <button
                     type="submit"
                     disabled={isSubmitting}
