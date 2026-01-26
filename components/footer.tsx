@@ -1,10 +1,12 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { ArrowUpRight, Copy } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 export function Footer() {
+  const pathname = usePathname() ?? ""
   const { toast } = useToast()
   
   const phoneNumber = "(+44) 07707 683220"
@@ -89,16 +91,36 @@ export function Footer() {
           <div className="space-y-4">
             <h4 className="text-white font-mono text-sm font-bold">Pages</h4>
             <div className="flex flex-col gap-2 text-white/70 font-mono text-sm">
-              <Link href="/" className="hover:text-white transition-colors">
+              <Link 
+                href="/" 
+                className={`transition-colors ${
+                  pathname === "/" ? "text-white underline underline-offset-4" : "hover:text-white"
+                }`}
+              >
                 Home
               </Link>
-              <Link href="/services" className="hover:text-white transition-colors">
+              <Link 
+                href="/services" 
+                className={`transition-colors ${
+                  pathname === "/services" ? "text-white underline underline-offset-4" : "hover:text-white"
+                }`}
+              >
                 Services
               </Link>
-              <Link href="/work" className="hover:text-white transition-colors">
+              <Link 
+                href="/work" 
+                className={`transition-colors ${
+                  pathname === "/work" ? "text-white underline underline-offset-4" : "hover:text-white"
+                }`}
+              >
                 Work
               </Link>
-              <Link href="/about" className="hover:text-white transition-colors">
+              <Link 
+                href="/about" 
+                className={`transition-colors ${
+                  pathname === "/about" ? "text-white underline underline-offset-4" : "hover:text-white"
+                }`}
+              >
                 Ethos
               </Link>
               <span className="inline-flex items-center gap-2 opacity-40 cursor-not-allowed">
@@ -110,13 +132,23 @@ export function Footer() {
                     color: "#ffffff",
                   }}
                 >
-                  Coming Soon
+                  Coming soon
                 </span>
               </span>
-              <Link href="/contact" className="hover:text-white transition-colors">
+              <Link 
+                href="/contact" 
+                className={`transition-colors ${
+                  pathname === "/contact" ? "text-white underline underline-offset-4" : "hover:text-white"
+                }`}
+              >
                 Contact
               </Link>
-              <Link href="/careers" className="hover:text-white transition-colors">
+              <Link 
+                href="/careers" 
+                className={`transition-colors ${
+                  pathname === "/careers" ? "text-white underline underline-offset-4" : "hover:text-white"
+                }`}
+              >
                 Careers
               </Link>
             </div>
@@ -195,10 +227,20 @@ export function Footer() {
           <div className="space-y-4">
             <h4 className="text-white font-mono text-sm font-bold">Legal</h4>
             <div className="flex flex-col gap-2 text-white/70 font-mono text-sm">
-              <Link href="/privacy" className="hover:text-white transition-colors">
+              <Link 
+                href="/privacy" 
+                className={`transition-colors ${
+                  pathname === "/privacy" ? "text-white underline underline-offset-4" : "hover:text-white"
+                }`}
+              >
                 Privacy Policy
               </Link>
-              <Link href="/cookies" className="hover:text-white transition-colors">
+              <Link 
+                href="/cookies" 
+                className={`transition-colors ${
+                  pathname === "/cookies" ? "text-white underline underline-offset-4" : "hover:text-white"
+                }`}
+              >
                 Cookie Policy
               </Link>
             </div>

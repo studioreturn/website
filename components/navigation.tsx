@@ -109,7 +109,7 @@ export function Navigation() {
                         color: isScrolled ? "#1100FF" : "#ffffff",
                       }}
                     >
-                      Coming Soon
+                      Coming soon
                     </span>
                   </span>
                 )
