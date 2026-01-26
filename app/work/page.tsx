@@ -4,7 +4,7 @@ import Link from "next/link"
 import { PageWrapper } from "@/components/page-wrapper"
 import { ArrowUpRight, ArrowRight, Copy } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 
 const BLUE = "#1100FF"
 const GREY_BG = "#f5f5fa"
@@ -12,6 +12,67 @@ const DARK_TEXT = "#0a0033"
 
 export default function WorkPage() {
   const { toast } = useToast()
+  const workGridRef = useRef<HTMLDivElement>(null)
+  const workSectionRef = useRef<HTMLDivElement>(null)
+  const [horizontalLinePositions, setHorizontalLinePositions] = useState<number[]>([])
+  
+  useEffect(() => {
+    const calculateLinePositions = () => {
+      if (!workGridRef.current || !workSectionRef.current) return
+      
+      const grid = workGridRef.current
+      const section = workSectionRef.current
+      
+      // Find the group divs and get their first child (the thumbnail)
+      const groups = grid.querySelectorAll('.group')
+      if (groups.length < 4) return
+
+      // Grid is 2 columns, so:
+      // Row 1: groups[0] (left), groups[1] (right)
+      // Row 2: groups[2] (left), groups[3] (right)
+      const firstRowLeft = groups[0] as HTMLElement
+      const firstRowRight = groups[1] as HTMLElement
+      const secondRowLeft = groups[2] as HTMLElement
+      const secondRowRight = groups[3] as HTMLElement
+      
+      // Get the thumbnail divs (first child of each group - the aspect-[4/3] div)
+      const firstRowLeftThumb = firstRowLeft.firstElementChild as HTMLElement
+      const firstRowRightThumb = firstRowRight.firstElementChild as HTMLElement
+      const secondRowLeftThumb = secondRowLeft.firstElementChild as HTMLElement
+      const secondRowRightThumb = secondRowRight.firstElementChild as HTMLElement
+      
+      if (!firstRowLeftThumb || !firstRowRightThumb || !secondRowLeftThumb || !secondRowRightThumb) return
+      
+      const sectionRect = section.getBoundingClientRect()
+      const firstRowLeftRect = firstRowLeftThumb.getBoundingClientRect()
+      const firstRowRightRect = firstRowRightThumb.getBoundingClientRect()
+      const secondRowLeftRect = secondRowLeftThumb.getBoundingClientRect()
+      const secondRowRightRect = secondRowRightThumb.getBoundingClientRect()
+      
+      // Calculate positions relative to the section (where grid lines container is positioned)
+      // Four lines: top and bottom of each row
+      const topOfFirstRow = firstRowLeftRect.top - sectionRect.top
+      const bottomOfFirstRow = Math.max(firstRowLeftRect.bottom, firstRowRightRect.bottom) - sectionRect.top
+      const topOfSecondRow = secondRowLeftRect.top - sectionRect.top
+      const bottomOfSecondRow = Math.max(secondRowLeftRect.bottom, secondRowRightRect.bottom) - sectionRect.top
+      
+      setHorizontalLinePositions([topOfFirstRow, bottomOfFirstRow, topOfSecondRow, bottomOfSecondRow])
+    }
+
+    // Wait for layout to settle, try multiple times to ensure elements are rendered
+    const timeoutId1 = setTimeout(calculateLinePositions, 100)
+    const timeoutId2 = setTimeout(calculateLinePositions, 500)
+    const timeoutId3 = setTimeout(calculateLinePositions, 1000)
+    window.addEventListener('resize', calculateLinePositions)
+    
+    return () => {
+      clearTimeout(timeoutId1)
+      clearTimeout(timeoutId2)
+      clearTimeout(timeoutId3)
+      window.removeEventListener('resize', calculateLinePositions)
+    }
+  }, [])
+  
   
   // Contact form state
   const [formState, setFormState] = useState({
@@ -101,21 +162,197 @@ export default function WorkPage() {
             Work
           </h1>
           <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed">
-            Selected projects from our portfolio. Each one crafted with care and attention to detail.
+            Some selected projects.
           </p>
         </div>
       </section>
 
-      <section className="px-8 py-16 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Work Item 1 - Breakout */}
+      <section ref={workSectionRef} className="px-8 py-16 relative" style={{ backgroundColor: GREY_BG }}>
+        {/* Grid lines for work section */}
+        <div className="hidden md:block absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+          {/* Vertical lines - constrained to content width */}
+          <div className="max-w-6xl mx-auto h-full relative px-8">
+            {/* Left edge of first column */}
+            <div 
+              className="absolute top-0 bottom-0"
+              style={{ 
+                left: '-1px',
+                width: '1px',
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                zIndex: 10,
+                opacity: 0,
+                animation: 'drawVertical 0.4s ease-out forwards',
+                animationDelay: '0.15s'
+              }}
+            />
+            {/* Right edge of first column (inner edge of gap) */}
+            <div 
+              className="absolute top-0 bottom-0"
+              style={{ 
+                left: 'calc(50% - 1rem + 1px)',
+                width: '1px',
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                zIndex: 10,
+                opacity: 0,
+                animation: 'drawVertical 0.4s ease-out forwards',
+                animationDelay: '0.2s'
+              }}
+            />
+            {/* Left edge of second column (inner edge of gap) */}
+            <div 
+              className="absolute top-0 bottom-0"
+              style={{ 
+                left: 'calc(50% + 1rem - 1px)',
+                width: '1px',
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                zIndex: 10,
+                opacity: 0,
+                animation: 'drawVertical 0.4s ease-out forwards',
+                animationDelay: '0.25s'
+              }}
+            />
+            {/* Right edge of second column */}
+            <div 
+              className="absolute top-0 bottom-0"
+              style={{ 
+                right: '-1px',
+                width: '1px',
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                zIndex: 10,
+                opacity: 0,
+                animation: 'drawVertical 0.4s ease-out forwards',
+                animationDelay: '0.3s'
+              }}
+            />
+          </div>
+          
+          {/* Horizontal lines - full width, aligned with work thumbnails */}
+          {horizontalLinePositions.length >= 4 && (
+            <>
+              {/* Top of first row */}
+              <div 
+                className="absolute left-0 right-0"
+                style={{ 
+                  top: `${horizontalLinePositions[0] - 1}px`,
+                  height: '1px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  zIndex: 10,
+                  opacity: 0,
+                  animation: 'drawHorizontal 0.4s ease-out forwards',
+                  animationDelay: '0.4s'
+                }}
+              />
+              {/* Bottom of first row */}
+              <div 
+                className="absolute left-0 right-0"
+                style={{ 
+                  top: `${horizontalLinePositions[1] + 1}px`,
+                  height: '1px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  zIndex: 10,
+                  opacity: 0,
+                  animation: 'drawHorizontal 0.4s ease-out forwards',
+                  animationDelay: '0.45s'
+                }}
+              />
+              {/* Top of second row */}
+              <div 
+                className="absolute left-0 right-0"
+                style={{ 
+                  top: `${horizontalLinePositions[2] - 1}px`,
+                  height: '1px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  zIndex: 10,
+                  opacity: 0,
+                  animation: 'drawHorizontal 0.4s ease-out forwards',
+                  animationDelay: '0.5s'
+                }}
+              />
+              {/* Bottom of second row */}
+              <div 
+                className="absolute left-0 right-0"
+                style={{ 
+                  top: `${horizontalLinePositions[3] + 1}px`,
+                  height: '1px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  zIndex: 10,
+                  opacity: 0,
+                  animation: 'drawHorizontal 0.4s ease-out forwards',
+                  animationDelay: '0.55s'
+                }}
+              />
+            </>
+          )}
+        </div>
+        <div className="max-w-6xl mx-auto relative">
+          <div ref={workGridRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Work Item 1 - Coconut */}
             <div className="group">
-              <div className="aspect-[4/3] bg-gray-100 mb-4"></div>
+              <a
+                href="https://www.getcoconut.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
+              >
+                <div 
+                  className="aspect-[4/3] mb-4 relative overflow-hidden cursor-pointer"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
+                  }}
+                >
+                  <img
+                    src="/Coconut.png"
+                    alt="Coconut app interface"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              </a>
+              <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>Client Work</span>
+              <h3 className="font-serif font-bold text-xl mb-2 mt-1" style={{ color: DARK_TEXT }}>Coconut</h3>
+              <p className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>
+                The bank account for freelancers.
+              </p>
+              <a
+                href="https://www.getcoconut.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 mt-4 font-mono text-sm underline hover:opacity-70 transition-opacity"
+                style={{ color: BLUE }}
+              >
+                View project
+                <ArrowUpRight className="w-3 h-3" />
+              </a>
+            </div>
+
+            {/* Work Item 2 - Breakout */}
+            <div className="group">
+              <a
+                href="https://letsbreakout.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
+              >
+                <div 
+                  className="aspect-[4/3] mb-4 relative overflow-hidden cursor-pointer"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
+                  }}
+                >
+                  <img
+                    src="/breakout.png"
+                    alt="Breakout website"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              </a>
               <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>Our Product</span>
               <h3 className="font-serif font-bold text-xl mb-2 mt-1" style={{ color: DARK_TEXT }}>Breakout</h3>
               <p className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>
-                A screen time app that helps you break free from your phone.
+                Your remote team&apos;s new breakout area.
               </p>
               <a
                 href="https://letsbreakout.com"
@@ -129,30 +366,44 @@ export default function WorkPage() {
               </a>
             </div>
 
-            {/* Placeholder projects */}
+            {/* Work Item 3 - Scene */}
             <div className="group">
-              <div className="aspect-[4/3] bg-gray-100 mb-4"></div>
-              <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>Client Work</span>
-              <h3 className="font-serif font-bold text-xl mb-2 mt-1" style={{ color: DARK_TEXT }}>Client Project</h3>
+              <div 
+                className="aspect-[4/3] mb-4 relative overflow-hidden"
+                style={{
+                  backgroundColor: '#ffffff',
+                  backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
+                  backgroundSize: '20px 20px'
+                }}
+              >
+                <img
+                  src="/scene.png"
+                  alt="Scene app interface"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>Our Product</span>
+              <h3 className="font-serif font-bold text-xl mb-2 mt-1" style={{ color: DARK_TEXT }}>Scene</h3>
               <p className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>
-                Brand identity and website design for a sustainable fashion brand.
+                Your guide to the local music scene.
               </p>
               <span className="inline-block mt-4 font-mono text-sm" style={{ color: `${DARK_TEXT}50` }}>Coming soon</span>
             </div>
 
+            {/* Work Item 4 - Bastiant */}
             <div className="group">
-              <div className="aspect-[4/3] bg-gray-100 mb-4"></div>
+              <div className="aspect-[4/3] mb-4 relative overflow-hidden" style={{ backgroundColor: '#ededf2' }}>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <p className="text-2xl return-heading" style={{ color: DARK_TEXT }}>
+                    Coming soon...
+                  </p>
+                </div>
+              </div>
               <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>Client Work</span>
-              <h3 className="font-serif font-bold text-xl mb-2 mt-1" style={{ color: DARK_TEXT }}>SaaS Dashboard</h3>
-              <p className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>UI/UX design for an analytics platform.</p>
-              <span className="inline-block mt-4 font-mono text-sm" style={{ color: `${DARK_TEXT}50` }}>Coming soon</span>
-            </div>
-
-            <div className="group">
-              <div className="aspect-[4/3] bg-gray-100 mb-4"></div>
-              <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>Client Work</span>
-              <h3 className="font-serif font-bold text-xl mb-2 mt-1" style={{ color: DARK_TEXT }}>Mobile App</h3>
-              <p className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>iOS app design for a wellness startup.</p>
+              <h3 className="font-serif font-bold text-xl mb-2 mt-1" style={{ color: DARK_TEXT }}>Bastiant</h3>
+              <p className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>
+                The AI market intelligence platform.
+              </p>
               <span className="inline-block mt-4 font-mono text-sm" style={{ color: `${DARK_TEXT}50` }}>Coming soon</span>
             </div>
           </div>
@@ -166,7 +417,7 @@ export default function WorkPage() {
             Got a project in mind?
           </h2>
           <p className="text-white/70 font-mono text-base mb-12">
-            We&apos;d love to hear about it. Get in touch and let&apos;s make something nice.
+            We&apos;d love to hear about it. Get in touch and let&apos;s make something cool together.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {/* Contact Form */}
@@ -209,7 +460,7 @@ export default function WorkPage() {
                       onChange={handleChange}
                       disabled={isSubmitting}
                       className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 font-mono text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-colors disabled:opacity-50"
-                      placeholder="your.email@example.com"
+                      placeholder="your.name@email.com"
                     />
                   </div>
                   <div>

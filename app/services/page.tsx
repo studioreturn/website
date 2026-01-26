@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { PageWrapper } from "@/components/page-wrapper"
-import { ArrowRight, Copy, ArrowUpRight } from "lucide-react"
+import { ArrowRight, Copy, ArrowUpRight, Check } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useState } from "react"
 
@@ -106,120 +106,460 @@ export default function ServicesPage() {
         </div>
       </section>
       
-      {/* Branding Section */}
-      <section id="branding" className="px-8 py-16 scroll-mt-24 bg-white">
+      {/* Website Design & Development Section */}
+      <section id="websites" className="px-8 py-16 scroll-mt-24 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif font-bold text-3xl mb-8" style={{ color: DARK_TEXT }}>Branding</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="space-y-4">
-              <p className="font-mono text-sm leading-relaxed" style={{ color: `${DARK_TEXT}80` }}>
-                Your brand is more than a logo. It&apos;s the feeling people get when they interact with your
-                business. We help you define and express that feeling consistently across every touchpoint.
-              </p>
-              <ul className="font-mono text-sm space-y-2" style={{ color: `${DARK_TEXT}80` }}>
-                <li>- Logo design and variations</li>
-                <li>- Visual identity system</li>
-                <li>- Brand guidelines document</li>
-                <li>- Typography and colour palette</li>
-                <li>- Brand collateral design</li>
-                <li>- Social media templates</li>
+          <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>Website Design & Development</h2>
+          <p className="font-mono text-sm leading-relaxed mb-12 max-w-3xl" style={{ color: `${DARK_TEXT}80` }}>
+            We design and build websites that work beautifully. Fast, accessible, and easy to manage.
+          </p>
+
+          {/* Pricing Table */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            {/* Starter Package */}
+            <div 
+              className="border-2 p-8 space-y-8" 
+              style={{ 
+                borderColor: `${DARK_TEXT}20`,
+                backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+                backgroundSize: '20px 20px'
+              }}
+            >
+              <div>
+                <h3 className="font-mono text-sm font-bold mb-3 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Starter</h3>
+                <p className="font-serif font-bold text-5xl mb-2" style={{ color: DARK_TEXT }}>£2,000</p>
+                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}60` }}>Perfect for new businesses</p>
+              </div>
+              
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                  <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>Single landing page design</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                  <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>Responsive across all devices</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                  <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>Contact form integration</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                  <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>Performance optimised</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                  <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>2 weeks delivery</span>
+                </li>
               </ul>
+
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 w-full px-6 py-4 font-mono text-sm font-bold hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: BLUE, color: "white" }}
+              >
+                Get started
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-            <div className="space-y-6">
-              <div className="border p-6" style={{ borderColor: `${DARK_TEXT}20` }}>
-                <h4 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>Starter</h4>
-                <p className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>£2,500</p>
-                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}80` }}>Logo, basic guidelines, colour palette</p>
+
+            {/* Growth Package */}
+            <div 
+              className="border-2 p-8 space-y-8" 
+              style={{ 
+                borderColor: BLUE, 
+                backgroundColor: `${BLUE}05`,
+                backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+                backgroundSize: '20px 20px'
+              }}
+            >
+              <div>
+                <h3 className="font-mono text-sm font-bold mb-3 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Growth</h3>
+                <p className="font-serif font-bold text-5xl mb-2" style={{ color: DARK_TEXT }}>£5,000</p>
+                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}60` }}>For scaling businesses</p>
               </div>
-              <div className="border p-6" style={{ borderColor: `${DARK_TEXT}20` }}>
-                <h4 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>Complete</h4>
-                <p className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>£5,000</p>
-                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}80` }}>Full identity system, guidelines, collateral</p>
+              
+              <div className="space-y-4">
+                <p className="font-mono text-sm font-bold" style={{ color: DARK_TEXT }}>
+                  Everything in Starter, plus:
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                    <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>Multi-page site (up to 10 pages)</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                    <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>CMS integration for easy updates</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                    <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>Blog or news section</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                    <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>Advanced animations</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                    <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>SEO optimisation</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: BLUE }} />
+                    <span className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>4-6 weeks delivery</span>
+                  </li>
+                </ul>
               </div>
-              <div className="border p-6" style={{ borderColor: `${DARK_TEXT}20` }}>
-                <h4 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>Enterprise</h4>
-                <p className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>From £10,000</p>
-                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}80` }}>Comprehensive rebrand, multi-brand systems</p>
-              </div>
+
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 w-full px-6 py-4 font-mono text-sm font-bold hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: BLUE, color: "white" }}
+              >
+                Get started
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Link to Packages */}
+          <div className="mt-12 pt-8 border-t" style={{ borderColor: `${DARK_TEXT}10` }}>
+            <p className="font-mono text-sm mb-4" style={{ color: `${DARK_TEXT}80` }}>
+              Save by combining branding and website services
+            </p>
+            <a
+              href="#packages"
+              className="inline-flex items-center gap-2 font-mono text-sm font-bold hover:opacity-70 transition-opacity"
+              style={{ color: BLUE }}
+              onClick={(e) => {
+                e.preventDefault()
+                document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              View packages
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+
+          {/* Website Examples */}
+          <div className="mt-16">
+            <h3 className="font-mono text-sm font-bold mb-6 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Recent work</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <a href="https://letsbreakout.com" target="_blank" rel="noopener noreferrer" className="group block">
+                <div 
+                  className="aspect-[4/3] mb-4 relative overflow-hidden"
+                  style={{
+                    backgroundColor: '#f3f4f6',
+                    backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
+                  }}
+                >
+                  <img
+                    src="/breakout.png"
+                    alt="Breakout website"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <h4 className="font-serif font-bold text-xl mb-2" style={{ color: DARK_TEXT }}>Breakout</h4>
+                <p className="font-mono text-sm mb-3" style={{ color: `${DARK_TEXT}70` }}>Marketing site for a remote team product</p>
+                <span className="inline-flex items-center gap-1 font-mono text-sm underline hover:opacity-70 transition-opacity" style={{ color: BLUE }}>
+                  View project
+                  <ArrowUpRight className="w-3 h-3" />
+                </span>
+              </a>
+
+              <a href="https://www.getcoconut.com/" target="_blank" rel="noopener noreferrer" className="group block">
+                <div 
+                  className="aspect-[4/3] mb-4 relative overflow-hidden"
+                  style={{
+                    backgroundColor: '#f3f4f6',
+                    backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
+                  }}
+                >
+                  <img
+                    src="/Coconut.png"
+                    alt="Coconut website"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <h4 className="font-serif font-bold text-xl mb-2" style={{ color: DARK_TEXT }}>Coconut</h4>
+                <p className="font-mono text-sm mb-3" style={{ color: `${DARK_TEXT}70` }}>Banking platform for freelancers</p>
+                <span className="inline-flex items-center gap-1 font-mono text-sm underline hover:opacity-70 transition-opacity" style={{ color: BLUE }}>
+                  View project
+                  <ArrowUpRight className="w-3 h-3" />
+                </span>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Websites Section */}
-      <section id="websites" className="px-8 py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
+      {/* Branding Section */}
+      <section id="branding" className="px-8 py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif font-bold text-3xl mb-8" style={{ color: DARK_TEXT }}>Website Design & Development</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="space-y-4">
-              <p className="font-mono text-sm leading-relaxed" style={{ color: `${DARK_TEXT}80` }}>
-                We design and build websites that work beautifully. Fast, accessible, and easy to manage. Whether you
-                need a simple marketing site or a complex web application, we&apos;ve got you covered.
-              </p>
-              <ul className="font-mono text-sm space-y-2" style={{ color: `${DARK_TEXT}80` }}>
-                <li>- Custom website design</li>
-                <li>- Responsive development</li>
-                <li>- CMS integration</li>
-                <li>- E-commerce solutions</li>
-                <li>- Performance optimisation</li>
-                <li>- Hosting and maintenance</li>
+          <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>Branding</h2>
+          <p className="font-mono text-sm leading-relaxed mb-12 max-w-3xl" style={{ color: `${DARK_TEXT}80` }}>
+            Your brand is more than a logo. It&apos;s the feeling people get when they interact with your business. 
+            We help you define and express that feeling consistently across every touchpoint.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <div>
+              <h3 className="font-mono text-sm font-bold mb-6 uppercase tracking-wider" style={{ color: DARK_TEXT }}>What&apos;s included</h3>
+              <ul className="font-mono text-sm space-y-3" style={{ color: `${DARK_TEXT}80` }}>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Logo design and variations</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Visual identity system</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Brand guidelines</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Typography and colour palette</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Collateral design</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Social media templates</span>
+                </li>
               </ul>
             </div>
-            <div className="space-y-6">
-              <div className="border p-6" style={{ borderColor: `${DARK_TEXT}20` }}>
-                <h4 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>Landing Page</h4>
-                <p className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>£1,500</p>
-                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}80` }}>Single page, responsive design</p>
+
+            <div 
+              className="border-2 p-8 space-y-6 flex flex-col justify-center" 
+              style={{ 
+                borderColor: `${DARK_TEXT}20`,
+                backgroundColor: 'white',
+                backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+                backgroundSize: '20px 20px'
+              }}
+            >
+              <div>
+                <h3 className="font-mono text-sm font-bold mb-3 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Bespoke pricing</h3>
+                <p className="font-mono text-sm leading-relaxed mb-6" style={{ color: `${DARK_TEXT}80` }}>
+                  Every branding project is unique. We tailor our approach based on your needs, whether you&apos;re a 
+                  startup looking for your first identity or an established business ready for a refresh.
+                </p>
               </div>
-              <div className="border p-6" style={{ borderColor: `${DARK_TEXT}20` }}>
-                <h4 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>Marketing Site</h4>
-                <p className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>£4,000</p>
-                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}80` }}>Multi-page site with CMS</p>
-              </div>
-              <div className="border p-6" style={{ borderColor: `${DARK_TEXT}20` }}>
-                <h4 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>Web Application</h4>
-                <p className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>From £8,000</p>
-                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}80` }}>Custom functionality, user accounts, APIs</p>
-              </div>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 w-full px-6 py-4 font-mono text-sm font-bold hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: BLUE, color: "white" }}
+              >
+                Get in touch for pricing
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
+
+          {/* Link to Packages */}
+          <div className="mt-12 pt-8 border-t" style={{ borderColor: `${DARK_TEXT}10` }}>
+            <p className="font-mono text-sm mb-4" style={{ color: `${DARK_TEXT}80` }}>
+              Save by combining branding and website services
+            </p>
+            <a
+              href="#packages"
+              className="inline-flex items-center gap-2 font-mono text-sm font-bold hover:opacity-70 transition-opacity"
+              style={{ color: BLUE }}
+              onClick={(e) => {
+                e.preventDefault()
+                document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              View packages
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+
+          {/* Branding Examples - Hidden for now, easy to restore */}
+          {/* <div>
+            <h3 className="font-mono text-sm font-bold mb-6 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Recent work</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              Branding examples will go here
+            </div>
+          </div> */}
         </div>
       </section>
 
       {/* UI/UX Section */}
       <section id="ui-ux" className="px-8 py-16 scroll-mt-24 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif font-bold text-3xl mb-8" style={{ color: DARK_TEXT }}>UI/UX Design</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="space-y-4">
-              <p className="font-mono text-sm leading-relaxed" style={{ color: `${DARK_TEXT}80` }}>
-                Great products start with great design. We help you understand your users and create interfaces that
-                are intuitive, accessible, and delightful to use.
-              </p>
-              <ul className="font-mono text-sm space-y-2" style={{ color: `${DARK_TEXT}80` }}>
-                <li>- User research and testing</li>
-                <li>- Wireframing and prototyping</li>
-                <li>- UI design and design systems</li>
-                <li>- Interaction design</li>
-                <li>- Accessibility audits</li>
-                <li>- Design handoff to developers</li>
+          <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>UI/UX Design</h2>
+          <p className="font-mono text-sm leading-relaxed mb-12 max-w-3xl" style={{ color: `${DARK_TEXT}80` }}>
+            Great products start with great design. We help you understand your users and create interfaces that 
+            are intuitive, accessible, and delightful to use.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div>
+              <h3 className="font-mono text-sm font-bold mb-6 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Our approach</h3>
+              <ul className="font-mono text-sm space-y-3 mb-8" style={{ color: `${DARK_TEXT}80` }}>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>User research and testing</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Wireframing and prototyping</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>UI design and design systems</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Interaction design</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Accessibility audits</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span style={{ color: BLUE }}>—</span>
+                  <span>Developer handoff</span>
+                </li>
               </ul>
             </div>
-            <div className="space-y-6">
-              <div className="border p-6" style={{ borderColor: `${DARK_TEXT}20` }}>
-                <h4 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>UX Audit</h4>
-                <p className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>£1,000</p>
-                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}80` }}>Review and recommendations</p>
+
+            <div 
+              className="border-2 p-8 space-y-6 flex flex-col justify-center" 
+              style={{ 
+                borderColor: `${DARK_TEXT}20`,
+                backgroundColor: 'white',
+                backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+                backgroundSize: '20px 20px'
+              }}
+            >
+              <div>
+                <h3 className="font-mono text-sm font-bold mb-3 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Bespoke pricing</h3>
+                <p className="font-mono text-sm leading-relaxed mb-6" style={{ color: `${DARK_TEXT}80` }}>
+                  UI/UX design is bespoke work. Every app is different, with unique challenges and requirements. 
+                  We&apos;ll work with you to understand your product and create a tailored solution.
+                </p>
               </div>
-              <div className="border p-6" style={{ borderColor: `${DARK_TEXT}20` }}>
-                <h4 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>App Design</h4>
-                <p className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>From £6,000</p>
-                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}80` }}>Full UI/UX for mobile or web app</p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 w-full px-6 py-4 font-mono text-sm font-bold hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: BLUE, color: "white" }}
+              >
+                Get in touch to discuss your project
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
+          {/* UX Audit Special Offering */}
+          <div 
+            className="border-2 p-8 md:p-12 mt-16" 
+            style={{ 
+              borderColor: BLUE, 
+              backgroundColor: 'white',
+              backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+              backgroundSize: '20px 20px'
+            }}
+          >
+            <div className="max-w-4xl">
+              <div className="flex items-start gap-3 mb-4">
+                <span className="px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider" style={{ backgroundColor: BLUE, color: 'white' }}>
+                  New
+                </span>
               </div>
-              <div className="border p-6" style={{ borderColor: `${DARK_TEXT}20` }}>
-                <h4 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>Design System</h4>
-                <p className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>From £4,000</p>
-                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}80` }}>Component library and documentation</p>
+              <h3 className="font-serif font-bold text-2xl mb-4" style={{ color: DARK_TEXT }}>UX Audit</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <div className="md:col-span-2">
+                  <p className="font-mono text-sm leading-relaxed mb-4" style={{ color: `${DARK_TEXT}80` }}>
+                    Get expert UX feedback on your product in a recorded Loom video. We&apos;ll review your app, identify 
+                    usability issues, and provide actionable recommendations to improve the user experience.
+                  </p>
+                  <ul className="font-mono text-sm space-y-2" style={{ color: `${DARK_TEXT}80` }}>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 mt-1 flex-shrink-0" style={{ color: BLUE }} />
+                      <span>15-20 minute video review</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 mt-1 flex-shrink-0" style={{ color: BLUE }} />
+                      <span>Detailed usability feedback</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 mt-1 flex-shrink-0" style={{ color: BLUE }} />
+                      <span>Prioritised recommendations</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 mt-1 flex-shrink-0" style={{ color: BLUE }} />
+                      <span>Delivered within 5 working days</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="flex flex-col items-start md:items-end">
+                  <p className="font-serif font-bold text-5xl mb-4" style={{ color: DARK_TEXT }}>£200</p>
+                  <a
+                    href="/contact"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 font-mono text-sm font-bold hover:opacity-90 transition-opacity"
+                    style={{ backgroundColor: BLUE, color: "white" }}
+                  >
+                    Buy UX Audit
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* UI/UX Examples */}
+          <div className="mt-16">
+            <h3 className="font-mono text-sm font-bold mb-6 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Recent work</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <a href="https://www.getcoconut.com/" target="_blank" rel="noopener noreferrer" className="group block">
+                <div 
+                  className="aspect-[4/3] mb-4 relative overflow-hidden"
+                  style={{
+                    backgroundColor: '#f3f4f6',
+                    backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
+                  }}
+                >
+                  <img
+                    src="/Coconut.png"
+                    alt="Coconut app interface"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <h4 className="font-serif font-bold text-xl mb-2" style={{ color: DARK_TEXT }}>Coconut</h4>
+                <p className="font-mono text-sm mb-3" style={{ color: `${DARK_TEXT}70` }}>Mobile banking app design</p>
+                <span className="inline-flex items-center gap-1 font-mono text-sm underline hover:opacity-70 transition-opacity" style={{ color: BLUE }}>
+                  View project
+                  <ArrowUpRight className="w-3 h-3" />
+                </span>
+              </a>
+
+              <div className="group">
+                <div 
+                  className="aspect-[4/3] mb-4 relative overflow-hidden"
+                  style={{
+                    backgroundColor: '#f3f4f6',
+                    backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
+                  }}
+                >
+                  <img
+                    src="/scene.png"
+                    alt="Scene app interface"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h4 className="font-serif font-bold text-xl mb-2" style={{ color: DARK_TEXT }}>Scene</h4>
+                <p className="font-mono text-sm" style={{ color: `${DARK_TEXT}70` }}>Music discovery app design</p>
               </div>
             </div>
           </div>
@@ -229,26 +569,32 @@ export default function ServicesPage() {
       {/* Packages Section */}
       <section id="packages" className="px-8 py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif font-bold text-3xl mb-8" style={{ color: DARK_TEXT }}>Packages</h2>
-          <p className="font-mono text-sm leading-relaxed max-w-2xl mb-8" style={{ color: `${DARK_TEXT}80` }}>
-            Save money by combining services. These packages are designed for startups and businesses who need a
-            complete brand and digital presence.
+          <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>Packages</h2>
+          <p className="font-mono text-sm leading-relaxed max-w-2xl mb-12" style={{ color: `${DARK_TEXT}80` }}>
+            Save by combining branding and website services. Perfect for startups and businesses launching a new digital presence.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Startup Package */}
-            <div className="border p-8 space-y-6" style={{ borderColor: `${DARK_TEXT}20` }}>
+            {/* Launch Package */}
+            <div 
+              className="border-2 p-8 space-y-6" 
+              style={{ 
+                borderColor: `${DARK_TEXT}20`,
+                backgroundColor: 'white',
+                backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+                backgroundSize: '20px 20px'
+              }}
+            >
               <div>
-                <h3 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>Startup Package</h3>
-                <p className="font-serif font-bold text-4xl" style={{ color: DARK_TEXT }}>£6,000</p>
-                <p className="font-mono text-xs line-through" style={{ color: `${DARK_TEXT}50` }}>Usually £7,500</p>
+                <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Launch Package</h3>
+                <p className="font-serif font-bold text-4xl mb-1" style={{ color: DARK_TEXT }}>£3,500</p>
+                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}50` }}>Save £500</p>
               </div>
               <ul className="font-mono text-sm space-y-2" style={{ color: `${DARK_TEXT}80` }}>
-                <li>+ Starter Branding (£2,500)</li>
-                <li>+ Marketing Site (£4,000)</li>
-                <li>+ 1 month support included</li>
+                <li>+ Starter Branding</li>
+                <li>+ Starter Website</li>
+                <li>+ 2 weeks support</li>
               </ul>
-              <p className="font-mono text-sm font-bold" style={{ color: DARK_TEXT }}>Save £1,500</p>
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 w-full px-6 py-3 font-mono text-sm font-bold hover:opacity-90 transition-opacity"
@@ -259,20 +605,26 @@ export default function ServicesPage() {
               </Link>
             </div>
 
-            {/* Growth Package */}
-            <div className="border p-8 space-y-6" style={{ borderColor: `${DARK_TEXT}20` }}>
+            {/* Complete Package */}
+            <div 
+              className="border-2 p-8 space-y-6" 
+              style={{ 
+                borderColor: `${DARK_TEXT}20`,
+                backgroundColor: 'white',
+                backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+                backgroundSize: '20px 20px'
+              }}
+            >
               <div>
-                <h3 className="font-mono text-sm font-bold mb-2" style={{ color: DARK_TEXT }}>Growth Package</h3>
-                <p className="font-serif font-bold text-4xl" style={{ color: DARK_TEXT }}>£12,000</p>
-                <p className="font-mono text-xs line-through" style={{ color: `${DARK_TEXT}50` }}>Usually £15,000</p>
+                <h3 className="font-mono text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: DARK_TEXT }}>Complete Package</h3>
+                <p className="font-serif font-bold text-4xl mb-1" style={{ color: DARK_TEXT }}>£9,500</p>
+                <p className="font-mono text-xs" style={{ color: `${DARK_TEXT}50` }}>Save £1,500</p>
               </div>
               <ul className="font-mono text-sm space-y-2" style={{ color: `${DARK_TEXT}80` }}>
-                <li>+ Complete Branding (£5,000)</li>
-                <li>+ Marketing Site (£4,000)</li>
-                <li>+ App Design (£6,000)</li>
-                <li>+ 3 months support included</li>
+                <li>+ Complete Branding</li>
+                <li>+ Growth Website</li>
+                <li>+ 3 months support</li>
               </ul>
-              <p className="font-mono text-sm font-bold" style={{ color: DARK_TEXT }}>Save £3,000</p>
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 w-full px-6 py-3 font-mono text-sm font-bold hover:opacity-90 transition-opacity"
@@ -283,7 +635,6 @@ export default function ServicesPage() {
               </Link>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -294,7 +645,7 @@ export default function ServicesPage() {
             Got a project in mind?
           </h2>
           <p className="text-white/70 font-mono text-base mb-12">
-            We&apos;d love to hear about it. Get in touch and let&apos;s make something nice.
+            We&apos;d love to hear about it. Get in touch and let&apos;s make something cool together.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {/* Contact Form */}
@@ -337,7 +688,7 @@ export default function ServicesPage() {
                       onChange={handleChange}
                       disabled={isSubmitting}
                       className="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 font-mono text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-colors disabled:opacity-50"
-                      placeholder="your.email@example.com"
+                      placeholder="your.name@email.com"
                     />
                   </div>
                   <div>

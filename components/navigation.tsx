@@ -53,7 +53,7 @@ export function Navigation() {
     { href: "/services", label: "Services" },
     { href: "/work", label: "Work" },
     { href: "/about", label: "About" },
-    { href: "/lab", label: "Lab" },
+    { href: "/labs", label: "Labs" },
   ]
 
   return (
@@ -87,17 +87,41 @@ export function Navigation() {
             className="flex items-center gap-8 font-mono text-sm transition-colors duration-300"
             style={{ color: isScrolled ? "#1100FF" : "#ffffff" }}
           >
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`transition-opacity ${
-                  pathname === item.href ? "underline underline-offset-4" : "hover:opacity-70"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isLabs = item.href === "/labs"
+              
+              if (isLabs) {
+                return (
+                  <span
+                    key={item.href}
+                    className="inline-flex items-center gap-2 opacity-60 cursor-not-allowed"
+                  >
+                    {item.label}
+                    <span
+                      className="text-xs px-2 py-0.5 rounded-full font-mono opacity-80"
+                      style={{
+                        backgroundColor: isScrolled ? "rgba(17, 0, 255, 0.15)" : "rgba(255, 255, 255, 0.3)",
+                        color: isScrolled ? "#1100FF" : "#ffffff",
+                      }}
+                    >
+                      Coming Soon
+                    </span>
+                  </span>
+                )
+              }
+              
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`transition-opacity ${
+                    pathname === item.href ? "underline underline-offset-4" : "hover:opacity-70"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </div>
 
           <Link
