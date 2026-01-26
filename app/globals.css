@@ -172,6 +172,43 @@
       font-style: italic !important;
     }
   }
+  
+  /* Company logo hover effects - transition from treated to original colored */
+  .company-logo-link {
+    position: relative;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .company-logo-link .logo-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .company-logo-link .logo-treated {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .company-logo-link .logo-colored {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+  }
+  
+  .company-logo-link:hover .logo-treated {
+    opacity: 0;
+  }
+  
+  .company-logo-link:hover .logo-colored {
+    opacity: 1;
+  }
 }
 
 @keyframes drawVertical {
