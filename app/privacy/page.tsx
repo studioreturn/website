@@ -32,7 +32,7 @@ export default function PrivacyPage() {
                   animationDelay: '0.2s'
                 }}
               >
-                <strong>Last updated:</strong> January 2025
+                <strong>Last updated:</strong> January 2026
               </p>
               <p 
                 className="mb-6"
