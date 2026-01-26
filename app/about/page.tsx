@@ -1,37 +1,74 @@
+"use client"
+
 import { PageWrapper } from "@/components/page-wrapper"
-import type { Metadata } from "next"
 
 const BLUE = "#1100FF"
 const GREY_BG = "#f5f5fa"
-
-export const metadata: Metadata = {
-  title: "About - Return",
-  description: "Our ethos and philosophy on building polite digital products.",
-}
+const DARK_TEXT = "#0a0033"
 
 export default function AboutPage() {
   return (
     <PageWrapper>
       <div className="px-8 py-16 bg-white">
         <div className="max-w-2xl mx-auto">
-          <div className="font-mono space-y-12 text-base leading-relaxed" style={{ color: "#0a0033" }}>
+          <div className="font-mono space-y-12 text-base leading-relaxed" style={{ color: DARK_TEXT }}>
             <section className="space-y-6">
-              <p className="mb-6" style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: "1.5rem", fontStyle: "italic" }}>Things weren&apos;t always like this.</p>
-              <p className="mb-6">
+              <p 
+                className="mb-6" 
+                style={{ 
+                  fontFamily: "Georgia, 'Times New Roman', serif", 
+                  fontSize: "1.5rem", 
+                  fontStyle: "italic",
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.2s'
+                }}
+              >
+                Things weren&apos;t always like this.
+              </p>
+              <p 
+                className="mb-6"
+                style={{
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.2s'
+                }}
+              >
                 Somewhere along the way, software started misbehaving. The products we use every day stopped solving our
                 problems and started trapping us - designed to hook us, track us, and sell our attention to the highest
                 bidder. We realised we were spending less time living our lives and more time scrolling aimlessly. We
                 want to change that by making software that solves real problems and connects us.
               </p>
 
-              <p className="mb-6">
+              <p 
+                className="mb-6"
+                style={{
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.2s'
+                }}
+              >
                 <strong className="font-bold text-base">We make polite products.</strong>
               </p>
-              <p className="mb-6">
+              <p 
+                className="mb-6"
+                style={{
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.2s'
+                }}
+              >
                 We design digital products that solve real problems while respecting your time and attention.
               </p>
 
-              <p className="mb-6">
+              <p 
+                className="mb-6"
+                style={{
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.2s'
+                }}
+              >
                 Our first product, Breakout, is{" "}
                 <a
                   href="https://letsbreakout.com"
@@ -46,15 +83,38 @@ export default function AboutPage() {
             </section>
 
             <section className="space-y-6">
-              <h3 className="mb-6 italic text-2xl" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>Our Ethos</h3>
-              <p className="mb-8">
+              <h3 
+                className="mb-6 italic text-2xl" 
+                style={{ 
+                  fontFamily: "Georgia, 'Times New Roman', serif",
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.2s'
+                }}
+              >
+                Our Ethos
+              </h3>
+              <p 
+                className="mb-8"
+                style={{
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.2s'
+                }}
+              >
                 We are driven by a simple philosophy:{" "}
                 <strong>Software should serve the you, the user. Nobody else. </strong> Here are the principles that
                 guide everything we design.
               </p>
 
               <div className="space-y-8">
-                <div>
+                <div
+                  style={{
+                    animation: 'fadeInUp 0.4s ease-out forwards',
+                    opacity: 0,
+                    animationDelay: '0.2s'
+                  }}
+                >
                   <p className="mb-4">
                     <strong>1/ Polite by design.</strong>
                   </p>
@@ -66,7 +126,13 @@ export default function AboutPage() {
                   </p>
                 </div>
 
-                <div>
+                <div
+                  style={{
+                    animation: 'fadeInUp 0.4s ease-out forwards',
+                    opacity: 0,
+                    animationDelay: '0.2s'
+                  }}
+                >
                   <p className="mb-4">
                     <strong>2/ We optimise for the exit.</strong>
                   </p>
@@ -77,7 +143,13 @@ export default function AboutPage() {
                   </p>
                 </div>
 
-                <div>
+                <div
+                  style={{
+                    animation: 'fadeInUp 0.4s ease-out forwards',
+                    opacity: 0,
+                    animationDelay: '0.2s'
+                  }}
+                >
                   <p className="mb-4">
                     <strong>3/ If you don&apos;t know what the product is, the product is you.</strong>
                   </p>
@@ -89,7 +161,13 @@ export default function AboutPage() {
                   </p>
                 </div>
 
-                <div>
+                <div
+                  style={{
+                    animation: 'fadeInUp 0.4s ease-out forwards',
+                    opacity: 0,
+                    animationDelay: '0.2s'
+                  }}
+                >
                   <p className="mb-4">
                     <strong>4/ Fuck doomscrolling.</strong>
                   </p>
@@ -100,7 +178,13 @@ export default function AboutPage() {
                   </p>
                 </div>
 
-                <div>
+                <div
+                  style={{
+                    animation: 'fadeInUp 0.4s ease-out forwards',
+                    opacity: 0,
+                    animationDelay: '0.2s'
+                  }}
+                >
                   <p className="mb-4">
                     <strong>5/ Crafted in Bristol.</strong>
                   </p>

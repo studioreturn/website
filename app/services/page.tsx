@@ -4,7 +4,7 @@ import Link from "next/link"
 import { PageWrapper } from "@/components/page-wrapper"
 import { ArrowRight, Copy, ArrowUpRight, Check } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 
 const BLUE = "#1100FF"
 const GREY_BG = "#f5f5fa"
@@ -21,6 +21,57 @@ export default function ServicesPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+
+  // Refs for scroll animations
+  const websiteSectionRef = useRef<HTMLElement>(null)
+  const brandingSectionRef = useRef<HTMLElement>(null)
+  const uiuxSectionRef = useRef<HTMLElement>(null)
+  const packagesSectionRef = useRef<HTMLElement>(null)
+
+  // Set up intersection observer for scroll animations
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -20% 0px',
+      threshold: 0.1
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in')
+        }
+      })
+    }, observerOptions)
+
+    // Find the scroll-animate divs within each section
+    const sections = [
+      websiteSectionRef.current,
+      brandingSectionRef.current,
+      uiuxSectionRef.current,
+      packagesSectionRef.current
+    ]
+
+    sections.forEach(section => {
+      if (section) {
+        const contentDiv = section.querySelector('.scroll-animate') as HTMLElement
+        if (contentDiv) {
+          observer.observe(contentDiv)
+        }
+      }
+    })
+
+    return () => {
+      sections.forEach(section => {
+        if (section) {
+          const contentDiv = section.querySelector('.scroll-animate') as HTMLElement
+          if (contentDiv) {
+            observer.unobserve(contentDiv)
+          }
+        }
+      })
+    }
+  }, [])
 
   const copyToClipboard = async (text: string, type: string) => {
     const labels: Record<string, string> = {
@@ -97,18 +148,33 @@ export default function ServicesPage() {
     <PageWrapper>
       <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto w-full">
-          <h1 className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+          <h1 
+            className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" 
+            style={{ 
+              fontFamily: "Georgia, 'Times New Roman', serif",
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.1s'
+            }}
+          >
             Services
           </h1>
-          <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed">
+          <p 
+            className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed"
+            style={{
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.15s'
+            }}
+          >
             We offer a range of design services to help you build polite digital products.
           </p>
         </div>
       </section>
       
       {/* Website Design & Development Section */}
-      <section id="websites" className="px-8 py-16 scroll-mt-24 bg-white">
-        <div className="max-w-6xl mx-auto">
+      <section ref={websiteSectionRef} id="websites" className="px-8 py-16 scroll-mt-24 bg-white">
+        <div className="max-w-6xl mx-auto scroll-animate">
           <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>Website Design & Development</h2>
           <p className="font-mono text-sm leading-relaxed mb-12 max-w-3xl" style={{ color: `${DARK_TEXT}80` }}>
             We design and build websites that work beautifully. Fast, accessible, and easy to manage.
@@ -297,8 +363,8 @@ export default function ServicesPage() {
       </section>
 
       {/* Branding Section */}
-      <section id="branding" className="px-8 py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
-        <div className="max-w-6xl mx-auto">
+      <section ref={brandingSectionRef} id="branding" className="px-8 py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
+        <div className="max-w-6xl mx-auto scroll-animate">
           <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>Branding</h2>
           <p className="font-mono text-sm leading-relaxed mb-12 max-w-3xl" style={{ color: `${DARK_TEXT}80` }}>
             Your brand is more than a logo. It&apos;s the feeling people get when they interact with your business. 
@@ -393,8 +459,8 @@ export default function ServicesPage() {
       </section>
 
       {/* UI/UX Section */}
-      <section id="ui-ux" className="px-8 py-16 scroll-mt-24 bg-white">
-        <div className="max-w-6xl mx-auto">
+      <section ref={uiuxSectionRef} id="ui-ux" className="px-8 py-16 scroll-mt-24 bg-white">
+        <div className="max-w-6xl mx-auto scroll-animate">
           <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>UI/UX Design</h2>
           <p className="font-mono text-sm leading-relaxed mb-12 max-w-3xl" style={{ color: `${DARK_TEXT}80` }}>
             Great products start with great design. We help you understand your users and create interfaces that 
@@ -567,8 +633,8 @@ export default function ServicesPage() {
       </section>
 
       {/* Packages Section */}
-      <section id="packages" className="px-8 py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
-        <div className="max-w-6xl mx-auto">
+      <section ref={packagesSectionRef} id="packages" className="px-8 py-16 scroll-mt-24" style={{ backgroundColor: GREY_BG }}>
+        <div className="max-w-6xl mx-auto scroll-animate">
           <h2 className="font-serif font-bold text-3xl mb-4" style={{ color: DARK_TEXT }}>Packages</h2>
           <p className="font-mono text-sm leading-relaxed max-w-2xl mb-12" style={{ color: `${DARK_TEXT}80` }}>
             Save by combining branding and website services. Perfect for startups and businesses launching a new digital presence.

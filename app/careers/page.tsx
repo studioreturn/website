@@ -1,24 +1,35 @@
+"use client"
+
 import { PageWrapper } from "@/components/page-wrapper"
-import type { Metadata } from "next"
 
 const BLUE = "#1100FF"
 const GREY_BG = "#f5f5fa"
 const DARK_TEXT = "#0a0033"
-
-export const metadata: Metadata = {
-  title: "Careers - Return",
-  description: "Join Studio Return. We're building polite products from Bristol, UK.",
-}
 
 export default function CareersPage() {
   return (
     <PageWrapper>
       <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto w-full">
-          <h1 className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+          <h1 
+            className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" 
+            style={{ 
+              fontFamily: "Georgia, 'Times New Roman', serif",
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.1s'
+            }}
+          >
             Careers
           </h1>
-          <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed">
+          <p 
+            className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed"
+            style={{
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.15s'
+            }}
+          >
             We&apos;re a small team doing meaningful work. If you care about craft and want to build products that
             respect people, you might be a good fit.
           </p>

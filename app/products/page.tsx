@@ -1,16 +1,12 @@
+"use client"
+
 import Link from "next/link"
 import { PageWrapper } from "@/components/page-wrapper"
-import type { Metadata } from "next"
 import { ArrowRight } from "lucide-react"
 
 const BLUE = "#1100FF"
 const GREY_BG = "#f5f5fa"
 const DARK_TEXT = "#0a0033"
-
-export const metadata: Metadata = {
-  title: "Products | Return",
-  description: "In-house products built by Return. Polite software that respects your time.",
-}
 
 export default function ProductsPage() {
   return (
@@ -18,10 +14,25 @@ export default function ProductsPage() {
       {/* Hero */}
       <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto w-full">
-          <h1 className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+          <h1 
+            className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" 
+            style={{ 
+              fontFamily: "Georgia, 'Times New Roman', serif",
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.1s'
+            }}
+          >
             Our Products
           </h1>
-          <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed">
+          <p 
+            className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed"
+            style={{
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.15s'
+            }}
+          >
             We don't just design for others - we build our own products too. Each one is crafted with the same care and
             attention we bring to client work, embodying our belief in polite, respectful software.
           </p>

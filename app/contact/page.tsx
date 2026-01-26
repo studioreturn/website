@@ -101,10 +101,25 @@ export default function ContactPage() {
     <PageWrapper>
       <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto w-full">
-          <h1 className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+          <h1 
+            className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" 
+            style={{ 
+              fontFamily: "Georgia, 'Times New Roman', serif",
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.1s'
+            }}
+          >
             Get in touch
           </h1>
-          <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed">
+          <p 
+            className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed"
+            style={{
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.15s'
+            }}
+          >
             Got a project in mind? Tell us about it. We&apos;ll get back to you within 2 business days.
           </p>
         </div>

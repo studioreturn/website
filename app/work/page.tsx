@@ -158,10 +158,25 @@ export default function WorkPage() {
     <PageWrapper>
       <section className="px-8 min-h-[40vh] flex items-center" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto w-full">
-          <h1 className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+          <h1 
+            className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide" 
+            style={{ 
+              fontFamily: "Georgia, 'Times New Roman', serif",
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.1s'
+            }}
+          >
             Work
           </h1>
-          <p className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed">
+          <p 
+            className="text-white/80 font-mono text-lg md:text-xl max-w-[calc(50%-3rem)] leading-relaxed"
+            style={{
+              animation: 'fadeInUp 0.4s ease-out forwards',
+              opacity: 0,
+              animationDelay: '0.15s'
+            }}
+          >
             Some selected projects.
           </p>
         </div>
@@ -287,7 +302,14 @@ export default function WorkPage() {
         <div className="max-w-6xl mx-auto relative">
           <div ref={workGridRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Work Item 1 - Coconut */}
-            <div className="group">
+            <div 
+              className="group"
+              style={{
+                animation: 'fadeInUp 0.4s ease-out forwards',
+                opacity: 0,
+                animationDelay: '0.25s'
+              }}
+            >
               <a
                 href="https://www.getcoconut.com/"
                 target="_blank"
@@ -327,7 +349,14 @@ export default function WorkPage() {
             </div>
 
             {/* Work Item 2 - Breakout */}
-            <div className="group">
+            <div 
+              className="group"
+              style={{
+                animation: 'fadeInUp 0.4s ease-out forwards',
+                opacity: 0,
+                animationDelay: '0.3s'
+              }}
+            >
               <a
                 href="https://letsbreakout.com"
                 target="_blank"
@@ -367,7 +396,14 @@ export default function WorkPage() {
             </div>
 
             {/* Work Item 3 - Scene */}
-            <div className="group">
+            <div 
+              className="group"
+              style={{
+                animation: 'fadeInUp 0.4s ease-out forwards',
+                opacity: 0,
+                animationDelay: '0.35s'
+              }}
+            >
               <div 
                 className="aspect-[4/3] mb-4 relative overflow-hidden"
                 style={{
@@ -391,7 +427,14 @@ export default function WorkPage() {
             </div>
 
             {/* Work Item 4 - Bastiant */}
-            <div className="group">
+            <div 
+              className="group"
+              style={{
+                animation: 'fadeInUp 0.4s ease-out forwards',
+                opacity: 0,
+                animationDelay: '0.4s'
+              }}
+            >
               <div className="aspect-[4/3] mb-4 relative overflow-hidden" style={{ backgroundColor: '#ededf2' }}>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <p className="text-2xl return-heading" style={{ color: DARK_TEXT }}>
