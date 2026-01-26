@@ -17,6 +17,7 @@ export default function Page() {
   const workSectionRef = useRef<HTMLDivElement>(null)
   const [horizontalLinePositions, setHorizontalLinePositions] = useState<number[]>([])
   const [isMobile, setIsMobile] = useState(false)
+  const [activeFilter, setActiveFilter] = useState<'client-work' | 'labs' | null>(null)
   
   // Contact form state
   const [formState, setFormState] = useState({
@@ -68,34 +69,84 @@ export default function Page() {
         setHorizontalLinePositions(positions)
       } else {
         // Desktop: 2 columns
-        // Row 1: groups[0] (left), groups[1] (right)
-        // Row 2: groups[2] (left), groups[3] (right)
-        const firstRowLeft = groups[0] as HTMLElement
-        const firstRowRight = groups[1] as HTMLElement
-        const secondRowLeft = groups[2] as HTMLElement
-        const secondRowRight = groups[3] as HTMLElement
+        // Get visible groups (filtered items won't be in DOM)
+        const visibleGroups = Array.from(groups).filter(group => {
+          const groupEl = group as HTMLElement
+          return groupEl.offsetParent !== null // Check if element is visible
+        }) as HTMLElement[]
+        
+        if (visibleGroups.length === 0) return
+        
+        // Find items for each row (may have fewer than 4 if filtered)
+        const firstRowLeft = visibleGroups[0]
+        const firstRowRight = visibleGroups[1] || visibleGroups[0]
+        const secondRowLeft = visibleGroups[2] || visibleGroups[visibleGroups.length - 1]
+        const secondRowRight = visibleGroups[3] || visibleGroups[visibleGroups.length - 1]
         
         // Get the thumbnail divs (first child of each group - the aspect-[4/3] div)
-        const firstRowLeftThumb = firstRowLeft.firstElementChild as HTMLElement
-        const firstRowRightThumb = firstRowRight.firstElementChild as HTMLElement
-        const secondRowLeftThumb = secondRowLeft.firstElementChild as HTMLElement
-        const secondRowRightThumb = secondRowRight.firstElementChild as HTMLElement
+        const firstRowLeftThumb = firstRowLeft?.firstElementChild as HTMLElement
+        const firstRowRightThumb = firstRowRight?.firstElementChild as HTMLElement
+        const secondRowLeftThumb = secondRowLeft?.firstElementChild as HTMLElement
+        const secondRowRightThumb = secondRowRight?.firstElementChild as HTMLElement
         
-        if (!firstRowLeftThumb || !firstRowRightThumb || !secondRowLeftThumb || !secondRowRightThumb) return
+        if (!firstRowLeftThumb || !firstRowRightThumb) return
         
         const firstRowLeftRect = firstRowLeftThumb.getBoundingClientRect()
         const firstRowRightRect = firstRowRightThumb.getBoundingClientRect()
-        const secondRowLeftRect = secondRowLeftThumb.getBoundingClientRect()
-        const secondRowRightRect = secondRowRightThumb.getBoundingClientRect()
         
         // Calculate positions relative to the section (where grid lines container is positioned)
-        // Four lines: top and bottom of each row
         const topOfFirstRow = firstRowLeftRect.top - sectionRect.top
         const bottomOfFirstRow = Math.max(firstRowLeftRect.bottom, firstRowRightRect.bottom) - sectionRect.top
-        const topOfSecondRow = secondRowLeftRect.top - sectionRect.top
-        const bottomOfSecondRow = Math.max(secondRowLeftRect.bottom, secondRowRightRect.bottom) - sectionRect.top
         
-        setHorizontalLinePositions([topOfFirstRow, bottomOfFirstRow, topOfSecondRow, bottomOfSecondRow])
+        let positions = [topOfFirstRow, bottomOfFirstRow]
+        
+        // If we have a second row
+        if (secondRowLeftThumb && secondRowRightThumb) {
+          const secondRowLeftRect = secondRowLeftThumb.getBoundingClientRect()
+          const secondRowRightRect = secondRowRightThumb.getBoundingClientRect()
+          const topOfSecondRow = secondRowLeftRect.top - sectionRect.top
+          const bottomOfSecondRow = Math.max(secondRowLeftRect.bottom, secondRowRightRect.bottom) - sectionRect.top
+          
+          positions.push(topOfSecondRow, bottomOfSecondRow)
+          
+          // Calculate spacing: distance from image bottom to category label
+          const firstRowLeftGroup = firstRowLeft as HTMLElement
+          const categoryLabel = firstRowLeftGroup.querySelector('span.font-mono.text-xs.uppercase') as HTMLElement
+          let spacing = 0
+          if (categoryLabel) {
+            const categoryRect = categoryLabel.getBoundingClientRect()
+            const imageBottom = firstRowLeftRect.bottom
+            spacing = categoryRect.top - imageBottom
+          }
+          
+          // Find the bottom of the last visible work item in the second row
+          const secondRowLeftGroup = secondRowLeft as HTMLElement
+          const secondRowRightGroup = secondRowRight as HTMLElement
+          
+          // Find the last element in each group (could be "Coming soon" span or link)
+          const leftLastElement = Array.from(secondRowLeftGroup.children).pop() as HTMLElement
+          const rightLastElement = Array.from(secondRowRightGroup.children).pop() as HTMLElement
+          
+          let bottomOfLastItem = bottomOfSecondRow
+          if (leftLastElement && rightLastElement) {
+            const leftRect = leftLastElement.getBoundingClientRect()
+            const rightRect = rightLastElement.getBoundingClientRect()
+            const maxBottom = Math.max(leftRect.bottom, rightRect.bottom)
+            bottomOfLastItem = maxBottom - sectionRect.top
+          } else if (leftLastElement) {
+            const leftRect = leftLastElement.getBoundingClientRect()
+            bottomOfLastItem = leftRect.bottom - sectionRect.top
+          } else if (rightLastElement) {
+            const rightRect = rightLastElement.getBoundingClientRect()
+            bottomOfLastItem = rightRect.bottom - sectionRect.top
+          }
+          
+          // Add the additional line below the last row with the same spacing as above category label
+          const bottomLinePosition = bottomOfLastItem + spacing
+          positions.push(bottomLinePosition)
+        }
+        
+        setHorizontalLinePositions(positions)
       }
     }
 
@@ -111,7 +162,7 @@ export default function Page() {
       clearTimeout(timeoutId3)
       window.removeEventListener('resize', calculateLinePositions)
     }
-  }, [])
+  }, [activeFilter, isMobile])
 
   const copyToClipboard = async (text: string, type: string) => {
     try {
@@ -299,7 +350,7 @@ export default function Page() {
                 animationDelay: '0.15s'
               }}
             >
-              Polite brands, websites and digital products - from Bristol, UK.
+              Polite products, brands and websites.
             </p>
             <div className="flex items-center gap-4 flex-wrap">
               <a
@@ -445,23 +496,57 @@ export default function Page() {
                 ))}
               </>
             )}
+            
           </div>
           <div className="max-w-6xl mx-auto relative">
-            <h2 
-              className="text-white font-serif font-bold text-3xl mb-8"
-              style={{ 
-                animation: 'fadeInUp 0.4s ease-out forwards',
-                opacity: 0,
-                animationDelay: '0.25s'
-              }}
-            >
-              Selected work
-            </h2>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+              <h2 
+                className="text-white font-serif font-bold text-3xl"
+                style={{ 
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.25s'
+                }}
+              >
+                Selected work
+              </h2>
+              <div 
+                className="flex items-center gap-2 md:justify-end pr-2"
+                style={{ 
+                  animation: 'fadeInUp 0.4s ease-out forwards',
+                  opacity: 0,
+                  animationDelay: '0.25s'
+                }}
+              >
+                <button
+                  onClick={() => setActiveFilter(activeFilter === 'client-work' ? null : 'client-work')}
+                  className={`px-4 py-1.5 rounded-full font-mono text-xs uppercase tracking-wider transition-all duration-200 ${
+                    activeFilter === 'client-work'
+                      ? 'text-white bg-white/20 hover:bg-white/30' 
+                      : 'text-white/50 bg-white/5 hover:bg-white/10'
+                  }`}
+                >
+                  Client work
+                </button>
+                <button
+                  onClick={() => setActiveFilter(activeFilter === 'labs' ? null : 'labs')}
+                  className={`px-4 py-1.5 rounded-full font-mono text-xs uppercase tracking-wider transition-all duration-200 ${
+                    activeFilter === 'labs'
+                      ? 'text-white bg-white/20 hover:bg-white/30' 
+                      : 'text-white/50 bg-white/5 hover:bg-white/10'
+                  }`}
+                >
+                  Labs
+                </button>
+              </div>
+            </div>
 
             <div ref={workGridRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Work Item 1 - Coconut */}
+              {(activeFilter === null || activeFilter === 'client-work') && (
               <div 
                 className="group"
+                data-category="client-work"
                 style={{ 
                   animation: 'fadeInUp 0.4s ease-out forwards',
                   opacity: 0,
@@ -510,10 +595,13 @@ export default function Page() {
                   <ArrowUpRight className="w-3 h-3" />
                 </a>
               </div>
+              )}
 
               {/* Work Item 2 - Breakout */}
+              {(activeFilter === null || activeFilter === 'labs') && (
               <div 
                 className="group"
+                data-category="labs"
                 style={{ 
                   animation: 'fadeInUp 0.4s ease-out forwards',
                   opacity: 0,
@@ -544,7 +632,7 @@ export default function Page() {
                   </div>
                 </a>
                 <span className="text-white/50 font-mono text-xs uppercase tracking-wider">
-                  Our Product
+                  LABS
                 </span>
                 <h3 className="text-white font-serif font-bold text-xl mb-2 mt-1">
                   Breakout
@@ -562,10 +650,13 @@ export default function Page() {
                   <ArrowUpRight className="w-3 h-3" />
                 </a>
               </div>
+              )}
 
               {/* Work Item 3 - Scene */}
+              {(activeFilter === null || activeFilter === 'labs') && (
               <div 
                 className="group"
+                data-category="labs"
                 style={{ 
                   animation: 'fadeInUp 0.4s ease-out forwards',
                   opacity: 0,
@@ -573,23 +664,25 @@ export default function Page() {
                 }}
               >
                 <div 
-                  className="aspect-[4/3] mb-4 relative overflow-hidden"
+                  className="aspect-[4/3] mb-4 relative"
                   style={{
                     backgroundColor: '#ffffff',
                     backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
                     backgroundSize: '20px 20px'
                   }}
                 >
-                  <Image
-                    src="/scene.png"
-                    alt="Scene app interface"
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    unoptimized
-                  />
+                  <div className="absolute inset-0 overflow-hidden">
+                    <Image
+                      src="/scene.png"
+                      alt="Scene app interface"
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      unoptimized
+                    />
+                  </div>
                 </div>
                 <span className="text-white/50 font-mono text-xs uppercase tracking-wider">
-                  Our Product
+                  LABS
                 </span>
                 <h3 className="text-white font-serif font-bold text-xl mb-2 mt-1">
                   Scene
@@ -601,10 +694,13 @@ export default function Page() {
                   Coming soon
                 </span>
               </div>
+              )}
 
               {/* Work Item 4 - Bastiant */}
+              {(activeFilter === null || activeFilter === 'client-work') && (
               <div 
                 className="group"
+                data-category="client-work"
                 style={{ 
                   animation: 'fadeInUp 0.4s ease-out forwards',
                   opacity: 0,
@@ -631,7 +727,16 @@ export default function Page() {
                   Coming soon
                 </span>
               </div>
+              )}
             </div>
+            <Link
+              href="/work"
+              className="inline-flex items-center gap-1 mt-16 mb-12 font-mono text-sm underline hover:opacity-70 transition-opacity"
+              style={{ color: '#ffffff' }}
+            >
+              View more
+              <ArrowRight className="w-3 h-3" />
+            </Link>
           </div>
         </div>
       </section>
@@ -900,7 +1005,7 @@ export default function Page() {
             </h2>
 
             <p className="font-mono text-lg leading-relaxed mb-6" style={{ color: DARK_TEXT }}>
-              We make things that respect people.
+              We make things that respect people&apos;s time and attention.
             </p>
 
             <p className="font-mono text-base leading-relaxed mb-8" style={{ color: `${DARK_TEXT}80` }}>

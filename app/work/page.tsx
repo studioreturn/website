@@ -409,7 +409,7 @@ export default function WorkPage() {
                   />
                 </div>
               </a>
-              <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>Our Product</span>
+              <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>LABS</span>
               <h3 className="font-serif font-bold text-xl mb-2 mt-1" style={{ color: DARK_TEXT }}>Breakout</h3>
               <p className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>
                 Your remote team&apos;s new breakout area.
@@ -449,7 +449,7 @@ export default function WorkPage() {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>Our Product</span>
+              <span className="font-mono text-xs uppercase tracking-wider" style={{ color: `${DARK_TEXT}50` }}>LABS</span>
               <h3 className="font-serif font-bold text-xl mb-2 mt-1" style={{ color: DARK_TEXT }}>Scene</h3>
               <p className="font-mono text-sm" style={{ color: `${DARK_TEXT}80` }}>
                 Your guide to the local music scene.
