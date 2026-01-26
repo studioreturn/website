@@ -483,7 +483,7 @@ export default function Page() {
                     }}
                   >
                     <Image
-                      src="/Coconut.png"
+                      src="/coconut.png"
                       alt="Coconut app interface"
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"

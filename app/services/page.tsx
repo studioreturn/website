@@ -345,8 +345,8 @@ export default function ServicesPage() {
                   }}
                 >
                   <img
-                    src="/Coconut.png"
-                    alt="Coconut website"
+                    src="/coconut.png"
+                    alt="Coconut app interface"
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
@@ -596,7 +596,7 @@ export default function ServicesPage() {
                   }}
                 >
                   <img
-                    src="/Coconut.png"
+                    src="/coconut.png"
                     alt="Coconut app interface"
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />

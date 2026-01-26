@@ -356,7 +356,7 @@ export default function WorkPage() {
                   }}
                 >
                   <img
-                    src="/Coconut.png"
+                    src="/coconut.png"
                     alt="Coconut app interface"
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
