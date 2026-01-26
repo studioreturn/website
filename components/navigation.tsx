@@ -156,23 +156,26 @@ export function Navigation() {
         </button>
 
         {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <>
-            <div
-              className="fixed inset-0 z-40 md:hidden bg-black/20"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{ top: "65px" }}
-            />
-            <div
-              className="fixed z-50 md:hidden w-full left-0 right-0"
-              style={{
-                backgroundColor: isScrolled ? "#ffffff" : "#1100FF",
-                top: "65px",
-                maxHeight: "calc(100vh - 65px)",
-                overflowY: "auto"
-              }}
-            >
-              <div className="px-4 py-8 flex flex-col gap-6">
+        <>
+          <div
+            className={`fixed inset-0 z-40 md:hidden bg-black/20 transition-opacity duration-300 ${
+              isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{ top: "65px" }}
+          />
+          <div
+            className={`fixed z-50 md:hidden w-full left-0 right-0 transition-all duration-300 ease-out ${
+              isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
+            }`}
+            style={{
+              backgroundColor: isScrolled ? "#ffffff" : "#1100FF",
+              top: "65px",
+              maxHeight: "calc(100vh - 65px)",
+              overflowY: "auto"
+            }}
+          >
+            <div className="px-4 py-8 flex flex-col gap-6">
               {navItems.map((item) => {
                 const isLabs = item.href === "/labs"
                 
@@ -214,7 +217,7 @@ export function Navigation() {
               <Link
                 href="/contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2 px-5 py-2.5 font-mono text-sm font-bold transition-colors duration-300 mt-4"
+                className="flex items-center justify-center gap-2 px-5 py-2.5 font-mono text-sm font-bold transition-colors duration-300 mt-4 w-full"
                 style={{
                   backgroundColor: isScrolled ? "#1100FF" : "#ffffff",
                   color: isScrolled ? "#ffffff" : "#1100FF",
@@ -223,10 +226,9 @@ export function Navigation() {
                 Contact
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              </div>
             </div>
-          </>
-        )}
+          </div>
+        </>
       </div>
     </nav>
   )
