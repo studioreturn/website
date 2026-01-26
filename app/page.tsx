@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { PageWrapper } from "@/components/page-wrapper"
-import { ArrowUpRight, ArrowRight, Copy } from "lucide-react"
+import { ArrowUpRight, ArrowRight, Copy, X } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -17,7 +17,7 @@ export default function Page() {
   const workSectionRef = useRef<HTMLDivElement>(null)
   const [horizontalLinePositions, setHorizontalLinePositions] = useState<number[]>([])
   const [isMobile, setIsMobile] = useState(false)
-  const [activeFilter, setActiveFilter] = useState<'client-work' | 'labs' | null>(null)
+  const [activeFilters, setActiveFilters] = useState<Set<'client-work' | 'labs'>>(new Set())
   
   // Contact form state
   const [formState, setFormState] = useState({
@@ -162,7 +162,7 @@ export default function Page() {
       clearTimeout(timeoutId3)
       window.removeEventListener('resize', calculateLinePositions)
     }
-  }, [activeFilter, isMobile])
+  }, [activeFilters, isMobile])
 
   const copyToClipboard = async (text: string, type: string) => {
     try {
@@ -244,16 +244,15 @@ export default function Page() {
           style={{ backgroundColor: BLUE }}
         >
           {/* Grid lines for hero section */}
-          <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+          <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
             {/* Mobile: Simple vertical lines */}
-            <div className="md:hidden max-w-6xl mx-auto h-full relative px-8">
+            <div className="md:hidden max-w-6xl mx-auto h-full relative px-4">
               <div 
                 className="absolute top-0 bottom-0"
                 style={{ 
-                  left: '-1px',
+                  left: '0px',
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0,
                   opacity: 0,
                   animation: 'drawVertical 0.4s ease-out forwards',
                   animationDelay: '0.1s'
@@ -262,10 +261,9 @@ export default function Page() {
               <div 
                 className="absolute top-0 bottom-0"
                 style={{ 
-                  right: '-1px',
+                  right: '0px',
                   width: '1px',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  zIndex: 0,
                   opacity: 0,
                   animation: 'drawVertical 0.4s ease-out forwards',
                   animationDelay: '0.15s'
@@ -331,7 +329,7 @@ export default function Page() {
               </div>
             </div>
           </div>
-          <div className="max-w-6xl mx-auto w-full">
+          <div className="max-w-6xl mx-auto w-full relative" style={{ zIndex: 2 }}>
             <h1 
               className="text-white text-3xl md:text-5xl mb-6 italic tracking-wide return-heading"
               style={{ 
@@ -518,32 +516,152 @@ export default function Page() {
                   animationDelay: '0.25s'
                 }}
               >
-                <button
-                  onClick={() => setActiveFilter(activeFilter === 'client-work' ? null : 'client-work')}
-                  className={`px-4 py-1.5 rounded-full font-mono text-xs uppercase tracking-wider transition-all duration-200 ${
-                    activeFilter === 'client-work'
-                      ? 'text-white bg-white/20 hover:bg-white/30' 
-                      : 'text-white/50 bg-white/5 hover:bg-white/10'
-                  }`}
-                >
-                  Client work
-                </button>
-                <button
-                  onClick={() => setActiveFilter(activeFilter === 'labs' ? null : 'labs')}
-                  className={`px-4 py-1.5 rounded-full font-mono text-xs uppercase tracking-wider transition-all duration-200 ${
-                    activeFilter === 'labs'
-                      ? 'text-white bg-white/20 hover:bg-white/30' 
-                      : 'text-white/50 bg-white/5 hover:bg-white/10'
-                  }`}
-                >
-                  Labs
-                </button>
+                {/* Clear all button - appears when filters are active */}
+                {activeFilters.size > 0 && (
+                  <button
+                    onClick={() => setActiveFilters(new Set())}
+                    className="flex items-center justify-center rounded-full text-white transition-all duration-200"
+                    style={{
+                      width: '1.75rem',
+                      height: '1.75rem',
+                      backgroundColor: '#4133FF'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#584DFF'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#4133FF'
+                    }}
+                    aria-label="Clear all filters"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                
+                {/* Merged or individual filter pills */}
+                {activeFilters.size > 1 ? (
+                  // Merged pill when both filters are active - seamless curved connection like Spotify
+                  <div className="flex items-center relative">
+                    {/* First pill (Client work) - left side, on top, normal size, slightly lighter */}
+                    <button
+                      onClick={() => {
+                        const newFilters = new Set(activeFilters)
+                        newFilters.delete('client-work')
+                        setActiveFilters(newFilters)
+                      }}
+                      className="px-4 py-1.5 font-mono text-xs uppercase tracking-wider text-white transition-all duration-200 rounded-full relative"
+                      style={{ 
+                        backgroundColor: '#5245FF',
+                        zIndex: 2
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#6356FF'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#5245FF'
+                      }}
+                    >
+                      Client work
+                    </button>
+                    {/* Second pill (Labs) - right side, underneath, extended to the left */}
+                    <button
+                      onClick={() => {
+                        const newFilters = new Set(activeFilters)
+                        newFilters.delete('labs')
+                        setActiveFilters(newFilters)
+                      }}
+                      className="py-1.5 pr-4 font-mono text-xs uppercase tracking-wider text-white transition-all duration-200 rounded-full relative"
+                      style={{ 
+                        backgroundColor: '#4133FF',
+                        paddingLeft: '2.5rem',
+                        marginLeft: '-1.5rem',
+                        zIndex: 1
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#584DFF'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#4133FF'
+                      }}
+                    >
+                      Labs
+                    </button>
+                  </div>
+                ) : (
+                  // Individual pills when 0 or 1 filter is active
+                  <>
+                    <button
+                      onClick={() => {
+                        const newFilters = new Set(activeFilters)
+                        if (newFilters.has('client-work')) {
+                          newFilters.delete('client-work')
+                        } else {
+                          newFilters.add('client-work')
+                        }
+                        setActiveFilters(newFilters)
+                      }}
+                      className="px-4 py-1.5 rounded-full font-mono text-xs uppercase tracking-wider transition-all duration-200"
+                      style={{
+                        color: activeFilters.has('client-work') ? '#ffffff' : 'rgba(255, 255, 255, 0.5)',
+                        backgroundColor: activeFilters.has('client-work') ? '#4133FF' : '#1D0DFF'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (activeFilters.has('client-work')) {
+                          e.currentTarget.style.backgroundColor = '#584DFF'
+                        } else {
+                          e.currentTarget.style.backgroundColor = '#291AFF'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (activeFilters.has('client-work')) {
+                          e.currentTarget.style.backgroundColor = '#4133FF'
+                        } else {
+                          e.currentTarget.style.backgroundColor = '#1D0DFF'
+                        }
+                      }}
+                    >
+                      Client work
+                    </button>
+                    <button
+                      onClick={() => {
+                        const newFilters = new Set(activeFilters)
+                        if (newFilters.has('labs')) {
+                          newFilters.delete('labs')
+                        } else {
+                          newFilters.add('labs')
+                        }
+                        setActiveFilters(newFilters)
+                      }}
+                      className="px-4 py-1.5 rounded-full font-mono text-xs uppercase tracking-wider transition-all duration-200"
+                      style={{
+                        color: activeFilters.has('labs') ? '#ffffff' : 'rgba(255, 255, 255, 0.5)',
+                        backgroundColor: activeFilters.has('labs') ? '#4133FF' : '#1D0DFF'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (activeFilters.has('labs')) {
+                          e.currentTarget.style.backgroundColor = '#584DFF'
+                        } else {
+                          e.currentTarget.style.backgroundColor = '#291AFF'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (activeFilters.has('labs')) {
+                          e.currentTarget.style.backgroundColor = '#4133FF'
+                        } else {
+                          e.currentTarget.style.backgroundColor = '#1D0DFF'
+                        }
+                      }}
+                    >
+                      Labs
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
             <div ref={workGridRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Work Item 1 - Coconut */}
-              {(activeFilter === null || activeFilter === 'client-work') && (
+              {(activeFilters.size === 0 || activeFilters.has('client-work')) && (
               <div 
                 className="group"
                 data-category="client-work"
@@ -598,7 +716,7 @@ export default function Page() {
               )}
 
               {/* Work Item 2 - Breakout */}
-              {(activeFilter === null || activeFilter === 'labs') && (
+              {(activeFilters.size === 0 || activeFilters.has('labs')) && (
               <div 
                 className="group"
                 data-category="labs"
@@ -653,7 +771,7 @@ export default function Page() {
               )}
 
               {/* Work Item 3 - Scene */}
-              {(activeFilter === null || activeFilter === 'labs') && (
+              {(activeFilters.size === 0 || activeFilters.has('labs')) && (
               <div 
                 className="group"
                 data-category="labs"
@@ -697,7 +815,7 @@ export default function Page() {
               )}
 
               {/* Work Item 4 - Bastiant */}
-              {(activeFilter === null || activeFilter === 'client-work') && (
+              {(activeFilters.size === 0 || activeFilters.has('client-work')) && (
               <div 
                 className="group"
                 data-category="client-work"
