@@ -34,10 +34,11 @@ export const metadata: Metadata = {
   generator: "v0.app",
   icons: {
     icon: [
-      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
     ],
-    shortcut: "/favicon/favicon.ico",
+    shortcut: "/favicon.ico",
     apple: "/favicon/apple-touch-icon.png",
   },
   appleWebApp: {

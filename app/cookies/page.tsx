@@ -32,7 +32,7 @@ export default function CookiesPage() {
                   animationDelay: '0.2s'
                 }}
               >
-                <strong>Last updated:</strong> {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                <strong>Last updated:</strong> January 2025
               </p>
               <p 
                 className="mb-6"
