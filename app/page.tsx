@@ -18,6 +18,7 @@ export default function Page() {
   const [horizontalLinePositions, setHorizontalLinePositions] = useState<number[]>([])
   const [isMobile, setIsMobile] = useState(false)
   const [activeFilters, setActiveFilters] = useState<Set<'client-work' | 'labs'>>(new Set())
+  const [animationsComplete, setAnimationsComplete] = useState(false)
   
   // Contact form state
   const [formState, setFormState] = useState({
@@ -39,6 +40,14 @@ export default function Page() {
     return () => {
       window.removeEventListener('resize', checkMobile)
     }
+  }, [])
+
+  useEffect(() => {
+    // Mark animations as complete after all image animations finish (1.2s + 0.4s max delay = 1.6s)
+    const timer = setTimeout(() => {
+      setAnimationsComplete(true)
+    }, 1700)
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
@@ -150,16 +159,13 @@ export default function Page() {
       }
     }
 
-    // Wait for layout to settle, try multiple times to ensure elements are rendered
-    const timeoutId1 = setTimeout(calculateLinePositions, 100)
-    const timeoutId2 = setTimeout(calculateLinePositions, 500)
-    const timeoutId3 = setTimeout(calculateLinePositions, 1000)
+    // Calculate positions immediately - cards are in final DOM position
+    // CSS transforms animate them visually but don't affect getBoundingClientRect final positions
+    const timeoutId = setTimeout(calculateLinePositions, 50)
     window.addEventListener('resize', calculateLinePositions)
     
     return () => {
-      clearTimeout(timeoutId1)
-      clearTimeout(timeoutId2)
-      clearTimeout(timeoutId3)
+      clearTimeout(timeoutId)
       window.removeEventListener('resize', calculateLinePositions)
     }
   }, [activeFilters, isMobile])
@@ -487,8 +493,8 @@ export default function Page() {
                       backgroundColor: 'rgba(255, 255, 255, 0.15)',
                       zIndex: 0,
                       opacity: 0,
-                      animation: 'drawHorizontal 0.4s ease-out forwards',
-                      animationDelay: `${0.4 + index * 0.05}s`
+                      animation: 'drawHorizontal 0.6s ease-out forwards',
+                      animationDelay: `${0.5 + index * 0.05}s`
                     }}
                   />
                 ))}
@@ -663,7 +669,7 @@ export default function Page() {
               {/* Work Item 1 - Coconut */}
               {(activeFilters.size === 0 || activeFilters.has('client-work')) && (
               <div 
-                className="group"
+                className={`group ${!animationsComplete ? 'animating' : ''}`}
                 data-category="client-work"
                 style={{ 
                   animation: 'fadeInUp 0.4s ease-out forwards',
@@ -678,20 +684,40 @@ export default function Page() {
                   className="block"
                 >
                   <div 
-                    className="aspect-[4/3] mb-4 relative overflow-hidden cursor-pointer"
+                    className="aspect-[4/3] mb-4 relative cursor-pointer"
                     style={{
                       backgroundColor: '#ffffff',
                       backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
-                      backgroundSize: '20px 20px'
+                      backgroundSize: '20px 20px',
+                      overflow: 'hidden'
                     }}
                   >
-                    <Image
-                      src="/coconut.png"
-                      alt="Coconut app interface"
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      unoptimized
-                    />
+                    <div className="absolute inset-0 work-image-container">
+                      {/* Bottom layer */}
+                      <Image
+                        src="/coconut-bottom.png"
+                        alt="Coconut app interface"
+                        fill
+                        className="object-cover work-image-bottom work-image-coconut"
+                        unoptimized
+                        onAnimationEnd={(e) => {
+                          e.currentTarget.style.animation = 'none'
+                          e.currentTarget.style.transform = 'translateY(10px) scale(1) translateX(0) rotate(0deg)'
+                        }}
+                      />
+                      {/* Top layer */}
+                      <Image
+                        src="/coconut-top.png"
+                        alt="Coconut app interface"
+                        fill
+                        className="object-cover work-image-top work-image-coconut"
+                        unoptimized
+                        onAnimationEnd={(e) => {
+                          e.currentTarget.style.animation = 'none'
+                          e.currentTarget.style.transform = 'translateY(10px) scale(1) translateX(0) rotate(0deg)'
+                        }}
+                      />
+                    </div>
                   </div>
                 </a>
                 <span className="text-white/50 font-mono text-xs uppercase tracking-wider">
@@ -718,7 +744,7 @@ export default function Page() {
               {/* Work Item 2 - Breakout */}
               {(activeFilters.size === 0 || activeFilters.has('labs')) && (
               <div 
-                className="group"
+                className={`group ${!animationsComplete ? 'animating' : ''}`}
                 data-category="labs"
                 style={{ 
                   animation: 'fadeInUp 0.4s ease-out forwards',
@@ -733,20 +759,40 @@ export default function Page() {
                   className="block"
                 >
                   <div 
-                    className="aspect-[4/3] mb-4 relative overflow-hidden cursor-pointer"
+                    className="aspect-[4/3] mb-4 relative cursor-pointer"
                     style={{
                       backgroundColor: '#ffffff',
                       backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
-                      backgroundSize: '20px 20px'
+                      backgroundSize: '20px 20px',
+                      overflow: 'hidden'
                     }}
                   >
-                    <Image
-                      src="/breakout.png"
-                      alt="Breakout website"
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      unoptimized
-                    />
+                    <div className="absolute inset-0 work-image-container">
+                      {/* Bottom layer */}
+                      <Image
+                        src="/breakout-bottom.png"
+                        alt="Breakout website"
+                        fill
+                        className="object-cover work-image-bottom work-image-breakout"
+                        unoptimized
+                        onAnimationEnd={(e) => {
+                          e.currentTarget.style.animation = 'none'
+                          e.currentTarget.style.transform = 'translateY(0) scale(1) translateX(0) rotate(0deg)'
+                        }}
+                      />
+                      {/* Top layer */}
+                      <Image
+                        src="/breakout-top.png"
+                        alt="Breakout website"
+                        fill
+                        className="object-cover work-image-top work-image-breakout"
+                        unoptimized
+                        onAnimationEnd={(e) => {
+                          e.currentTarget.style.animation = 'none'
+                          e.currentTarget.style.transform = 'translateY(0) scale(1) translateX(0) rotate(0deg)'
+                        }}
+                      />
+                    </div>
                   </div>
                 </a>
                 <span className="text-white/50 font-mono text-xs uppercase tracking-wider">
@@ -773,7 +819,7 @@ export default function Page() {
               {/* Work Item 3 - Scene */}
               {(activeFilters.size === 0 || activeFilters.has('labs')) && (
               <div 
-                className="group"
+                className={`group ${!animationsComplete ? 'animating' : ''}`}
                 data-category="labs"
                 style={{ 
                   animation: 'fadeInUp 0.4s ease-out forwards',
@@ -782,20 +828,38 @@ export default function Page() {
                 }}
               >
                 <div 
-                  className="aspect-[4/3] mb-4 relative"
+                  className="aspect-[4/3] mb-4 relative cursor-pointer"
                   style={{
                     backgroundColor: '#ffffff',
                     backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px)',
-                    backgroundSize: '20px 20px'
+                    backgroundSize: '20px 20px',
+                    overflow: 'hidden'
                   }}
                 >
-                  <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute inset-0 work-image-container">
+                    {/* Bottom layer */}
                     <Image
-                      src="/scene.png"
+                      src="/scene-bottom.png"
                       alt="Scene app interface"
                       fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="object-cover work-image-bottom work-image-scene"
                       unoptimized
+                      onAnimationEnd={(e) => {
+                        e.currentTarget.style.animation = 'none'
+                        e.currentTarget.style.transform = 'translateY(10px) scale(1) translateX(0) rotate(0deg)'
+                      }}
+                    />
+                    {/* Top layer */}
+                    <Image
+                      src="/scene-top.png"
+                      alt="Scene app interface"
+                      fill
+                      className="object-cover work-image-top work-image-scene"
+                      unoptimized
+                      onAnimationEnd={(e) => {
+                        e.currentTarget.style.animation = 'none'
+                        e.currentTarget.style.transform = 'translateY(10px) scale(1) translateX(0) rotate(0deg)'
+                      }}
                     />
                   </div>
                 </div>
