@@ -131,7 +131,9 @@ export function Navigation() {
 
           <Link
             href="/contact"
-            className="flex items-center gap-2 px-5 py-2.5 font-mono text-sm font-bold transition-colors duration-300"
+            className={`flex items-center gap-2 px-5 py-2.5 font-mono text-sm font-bold cta-primary ${
+              isScrolled ? "cta-primary-on-white" : "cta-primary-on-blue"
+            }`}
             style={{
               backgroundColor: isScrolled ? "#1100FF" : "#ffffff",
               color: isScrolled ? "#ffffff" : "#1100FF",
@@ -217,7 +219,9 @@ export function Navigation() {
               <Link
                 href="/contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2 px-5 py-2.5 font-mono text-sm font-bold transition-colors duration-300 mt-4 w-full"
+                className={`flex items-center justify-center gap-2 px-5 py-2.5 font-mono text-sm font-bold mt-4 w-full cta-primary ${
+                  isScrolled ? "cta-primary-on-white" : "cta-primary-on-blue"
+                }`}
                 style={{
                   backgroundColor: isScrolled ? "#1100FF" : "#ffffff",
                   color: isScrolled ? "#ffffff" : "#1100FF",

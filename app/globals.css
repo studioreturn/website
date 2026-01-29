@@ -434,3 +434,100 @@
 .scroll-animate.animate-in {
   animation: fadeInUp 0.6s ease-out forwards;
 }
+
+/* CTA Button Hover Animations */
+/* Primary CTA - Filled button that inverts on hover */
+.cta-primary {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.35s ease;
+}
+
+.cta-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--cta-hover-bg, #1100FF);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.cta-primary:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.cta-primary:hover {
+  color: var(--cta-hover-text, #ffffff);
+}
+
+/* Primary CTA variant for blue background (white button that inverts to blue text on white bg) */
+.cta-primary-on-blue {
+  --cta-hover-bg: #1100FF;
+  --cta-hover-text: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+.cta-primary-on-blue:hover {
+  background-color: transparent;
+}
+
+/* Primary CTA variant for white background (blue button that inverts to white text on blue bg) */
+.cta-primary-on-white {
+  --cta-hover-bg: #ffffff;
+  --cta-hover-text: #1100FF;
+  border: 2px solid #1100FF;
+}
+
+.cta-primary-on-white:hover {
+  background-color: transparent;
+}
+
+/* Secondary CTA - Outline button that fills on hover */
+.cta-secondary {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.35s ease, border-color 0.35s ease;
+}
+
+.cta-secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--cta-fill-bg, #ffffff);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.cta-secondary:hover::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+.cta-secondary:hover {
+  color: var(--cta-fill-text, #1100FF);
+}
+
+/* Secondary CTA variant for blue background (white outline that fills with white) */
+.cta-secondary-on-blue {
+  --cta-fill-bg: #ffffff;
+  --cta-fill-text: #1100FF;
+}
+
+/* Secondary CTA variant for white background (blue outline that fills with blue) */
+.cta-secondary-on-white {
+  --cta-fill-bg: #1100FF;
+  --cta-fill-text: #ffffff;
+}

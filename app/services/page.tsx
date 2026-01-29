@@ -777,7 +777,7 @@ export default function ServicesPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-8 py-4 bg-white font-mono text-sm font-bold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-center"
+                      className="px-8 py-4 bg-white border-2 border-white font-mono text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-center cta-primary cta-primary-on-blue"
                       style={{ color: BLUE }}
                     >
                       {isSubmitting ? "Sending..." : "Send message"}
@@ -786,7 +786,7 @@ export default function ServicesPage() {
                       href="https://calendly.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold hover:bg-white/10 transition-colors whitespace-nowrap"
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-mono text-sm font-bold whitespace-nowrap cta-secondary cta-secondary-on-blue"
                     >
                       Schedule a call
                       <ArrowUpRight className="w-5 h-5" />
