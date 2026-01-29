@@ -466,7 +466,7 @@
   background-color: #ffffff;
   color: #1100FF;
   border: 2px solid #ffffff;
-  transition: color 0.35s ease, background-color 0.35s ease;
+  transition: color 0.35s ease;
 }
 
 .cta-primary-on-blue::before {
@@ -475,7 +475,6 @@
 
 .cta-primary-on-blue:hover {
   color: #ffffff;
-  background-color: transparent;
 }
 
 /* Primary CTA on white background - Blue button that fills with white */
@@ -483,7 +482,7 @@
   background-color: #1100FF;
   color: #ffffff;
   border: 2px solid #1100FF;
-  transition: color 0.35s ease, background-color 0.35s ease;
+  transition: color 0.35s ease;
 }
 
 .cta-primary-on-white::before {
@@ -492,7 +491,6 @@
 
 .cta-primary-on-white:hover {
   color: #1100FF;
-  background-color: transparent;
 }
 
 /* Secondary CTA on blue background - Outline button that fills with white */
