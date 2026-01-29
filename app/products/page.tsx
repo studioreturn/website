@@ -68,8 +68,7 @@ export default function ProductsPage() {
                 href="https://letsbreakout.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 font-mono text-sm font-bold hover:bg-white/90 transition-colors border-2"
-                style={{ color: BLUE, borderColor: BLUE, backgroundColor: "white" }}
+                className="cta-button cta-primary-on-white inline-flex items-center gap-2 px-6 py-3 font-mono text-sm font-bold"
               >
                 Download Breakout
                 <ArrowRight className="w-4 h-4" />

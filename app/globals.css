@@ -434,3 +434,93 @@
 .scroll-animate.animate-in {
   animation: fadeInUp 0.6s ease-out forwards;
 }
+
+/* CTA Button Hover Animations - Left to right fill effect */
+/* Base styles for all CTA buttons */
+.cta-button {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.cta-button:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Primary CTA on blue background - White button that fills with blue */
+.cta-primary-on-blue {
+  background-color: #ffffff;
+  color: #1100FF;
+  border: 2px solid #ffffff;
+  transition: color 0.35s ease;
+}
+
+.cta-primary-on-blue::before {
+  background-color: #1100FF;
+}
+
+.cta-primary-on-blue:hover {
+  color: #ffffff;
+}
+
+/* Primary CTA on white background - Blue button that fills with white */
+.cta-primary-on-white {
+  background-color: #1100FF;
+  color: #ffffff;
+  border: 2px solid #1100FF;
+  transition: color 0.35s ease;
+}
+
+.cta-primary-on-white::before {
+  background-color: #ffffff;
+}
+
+.cta-primary-on-white:hover {
+  color: #1100FF;
+}
+
+/* Secondary CTA on blue background - Outline button that fills with white */
+.cta-secondary-on-blue {
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  transition: color 0.35s ease;
+}
+
+.cta-secondary-on-blue::before {
+  background-color: #ffffff;
+}
+
+.cta-secondary-on-blue:hover {
+  color: #1100FF;
+}
+
+/* Secondary CTA on white background - Outline button that fills with blue */
+.cta-secondary-on-white {
+  background-color: transparent;
+  color: #1100FF;
+  border: 2px solid #1100FF;
+  transition: color 0.35s ease;
+}
+
+.cta-secondary-on-white::before {
+  background-color: #1100FF;
+}
+
+.cta-secondary-on-white:hover {
+  color: #ffffff;
+}
