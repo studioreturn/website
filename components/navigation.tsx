@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ArrowRight, Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
+import { AnimatedLogo } from "./animated-logo"
 
 export function Navigation() {
   const pathname = usePathname() ?? ""
@@ -71,19 +72,11 @@ export function Navigation() {
       }}
     >
       <div className="max-w-6xl mx-auto flex items-center justify-between">
-        <Link href="/" className="hover:opacity-70 transition-opacity">
-          <span
-            className="transition-colors duration-300"
-            style={{
-              fontFamily: "Arial, sans-serif",
-              fontWeight: "bold",
-              fontSize: "32px",
-              lineHeight: 1,
-              color: isScrolled ? "#1100FF" : "#ffffff",
-            }}
-          >
-            :)
-          </span>
+        <Link href="/" className="transition-opacity">
+          <AnimatedLogo
+            color={isScrolled ? "#1100FF" : "#ffffff"}
+            size={32}
+          />
         </Link>
 
         {/* Desktop Navigation */}
