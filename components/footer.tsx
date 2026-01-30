@@ -132,7 +132,7 @@ export function Footer() {
                     color: "#ffffff",
                   }}
                 >
-                  Coming soon
+                  Coming Soon
                 </span>
               </span>
               <Link 
