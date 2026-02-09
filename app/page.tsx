@@ -3,6 +3,9 @@
 import Link from "next/link"
 import Image from "next/image"
 import { PageWrapper } from "@/components/page-wrapper"
+import { BoltIcon, type BoltIconHandle } from "@/components/ui/bolt-icon"
+import { GlobeIcon, type GlobeIconHandle } from "@/components/ui/globe-icon"
+import { LoaderPinwheelIcon, type LoaderPinwheelIconHandle } from "@/components/ui/loader-pinwheel-icon"
 import { ArrowUpRight, ArrowRight, Copy, X } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -15,9 +18,17 @@ export default function Page() {
   const { toast } = useToast()
   const workGridRef = useRef<HTMLDivElement>(null)
   const workSectionRef = useRef<HTMLDivElement>(null)
+  const uiuxIconRef = useRef<BoltIconHandle>(null)
+  const globeIconRef = useRef<GlobeIconHandle>(null)
+  const brandsIconRef = useRef<LoaderPinwheelIconHandle>(null)
+  const servicesSectionRef = useRef<HTMLElement>(null)
   const [horizontalLinePositions, setHorizontalLinePositions] = useState<number[]>([])
   const [isMobile, setIsMobile] = useState(false)
   const [activeFilters, setActiveFilters] = useState<Set<'client-work' | 'labs'>>(new Set())
+  const uiuxIconHasAnimatedRef = useRef(false)
+  const globeIconHasAnimatedRef = useRef(false)
+  const brandsIconHasAnimatedRef = useRef(false)
+  const servicesRevealedRef = useRef(false)
   const [animationsComplete, setAnimationsComplete] = useState(false)
   
   // Contact form state
@@ -170,6 +181,50 @@ export default function Page() {
     }
   }, [activeFilters, isMobile])
 
+  useEffect(() => {
+    const section = servicesSectionRef.current
+    if (!section) return
+    let timeoutIds: ReturnType<typeof setTimeout>[] = []
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting || servicesRevealedRef.current) return
+        servicesRevealedRef.current = true
+        const entranceDelay = 400
+        const stagger = 150
+        timeoutIds.push(
+          setTimeout(() => {
+            if (!brandsIconHasAnimatedRef.current) {
+              brandsIconHasAnimatedRef.current = true
+              brandsIconRef.current?.startAnimation()
+            }
+          }, entranceDelay),
+        )
+        timeoutIds.push(
+          setTimeout(() => {
+            if (!globeIconHasAnimatedRef.current) {
+              globeIconHasAnimatedRef.current = true
+              globeIconRef.current?.startAnimation()
+            }
+          }, entranceDelay + stagger),
+        )
+        timeoutIds.push(
+          setTimeout(() => {
+            if (!uiuxIconHasAnimatedRef.current) {
+              uiuxIconHasAnimatedRef.current = true
+              uiuxIconRef.current?.startAnimation()
+            }
+          }, entranceDelay + stagger * 2),
+        )
+      },
+      { threshold: 0.35, rootMargin: "0px 0px 0px 0px" },
+    )
+    observer.observe(section)
+    return () => {
+      observer.disconnect()
+      timeoutIds.forEach((id) => clearTimeout(id))
+    }
+  }, [])
+
   const copyToClipboard = async (text: string, type: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -246,7 +301,7 @@ export default function Page() {
       {/* Hero + Selected Work - Combined */}
       <section data-header-boundary className="relative" style={{ backgroundColor: BLUE }}>
         <div
-          className="px-4 md:px-8 min-h-[48vh] flex items-center relative"
+          className="px-4 md:px-8 min-h-[36vh] flex items-center relative"
           style={{ backgroundColor: BLUE }}
         >
           {/* Grid lines for hero section */}
@@ -388,7 +443,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div ref={workSectionRef} className="px-4 md:px-8 pt-10 pb-12 relative" style={{ backgroundColor: BLUE }}>
+        <div ref={workSectionRef} className="px-4 md:px-8 pt-6 pb-12 relative" style={{ backgroundColor: BLUE }}>
           {/* Grid lines for selected work section */}
           <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
             {/* Mobile: Two vertical lines, full width */}
@@ -923,7 +978,7 @@ export default function Page() {
       </section>
 
       {/* Services - White */}
-      <section className="px-4 md:px-8 py-8 md:py-16 bg-white">
+      <section ref={servicesSectionRef} className="px-4 md:px-8 py-8 md:py-16 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="font-serif font-bold text-3xl mb-12" style={{ color: DARK_TEXT }}>
             What we do
@@ -932,14 +987,8 @@ export default function Page() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {/* Branding */}
             <div className="space-y-4">
-              <div className="mb-6">
-                <Image
-                  src="/branding-icon.svg"
-                  alt="Branding icon"
-                  width={48}
-                  height={48}
-                  className="w-12 h-12"
-                />
+              <div className="mb-6 w-12 h-12" style={{ color: BLUE }}>
+                <LoaderPinwheelIcon ref={brandsIconRef} size={48} aria-label="Brands icon" />
               </div>
               <h3 className="font-serif font-bold text-2xl" style={{ color: DARK_TEXT }}>
                 Brands
@@ -951,14 +1000,8 @@ export default function Page() {
 
             {/* Website Design & Dev */}
             <div className="space-y-4">
-              <div className="mb-6">
-                <Image
-                  src="/websites-icon.svg"
-                  alt="Websites icon"
-                  width={48}
-                  height={48}
-                  className="w-12 h-12"
-                />
+              <div className="mb-6 w-12 h-12" style={{ color: BLUE }}>
+                <GlobeIcon ref={globeIconRef} size={48} aria-label="Websites icon" />
               </div>
               <h3 className="font-serif font-bold text-2xl" style={{ color: DARK_TEXT }}>
                 Websites
@@ -970,14 +1013,8 @@ export default function Page() {
 
             {/* UI/UX */}
             <div className="space-y-4">
-              <div className="mb-6">
-                <Image
-                  src="/uiux-icon.svg"
-                  alt="UI/UX icon"
-                  width={48}
-                  height={48}
-                  className="w-12 h-12"
-                />
+              <div className="mb-6 w-12 h-12" style={{ color: BLUE }}>
+                <BoltIcon ref={uiuxIconRef} size={48} aria-label="UI/UX icon" />
               </div>
               <h3 className="font-serif font-bold text-2xl" style={{ color: DARK_TEXT }}>
                 UI/UX
