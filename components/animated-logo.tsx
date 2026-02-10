@@ -65,8 +65,10 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
   const isBlue = color === "#1100FF"
 
   useEffect(() => {
-    // Mark as mounted to render all animations
-    setIsMounted(true)
+    // Small delay to ensure SVG transforms are applied before showing
+    const mountTimer = setTimeout(() => {
+      setIsMounted(true)
+    }, 50)
     
     // Initial animation timer
     animationTimerRef.current = setTimeout(() => {
@@ -75,6 +77,7 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
     }, 3200)
     
     return () => {
+      clearTimeout(mountTimer)
       if (animationTimerRef.current) {
         clearTimeout(animationTimerRef.current)
       }
@@ -93,7 +96,7 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
         height: `${size}px`,
         filter: isBlue ? 'brightness(0) saturate(100%) invert(11%) sepia(100%) saturate(7466%) hue-rotate(246deg) brightness(91%) contrast(148%)' : 'none',
         opacity: isMounted ? 1 : 0,
-        transition: 'opacity 0.2s ease-in-out',
+        transition: isMounted ? 'opacity 0.2s ease-in-out' : 'none',
       }}
     >
       {[1, 2, 3].map((num) => {
@@ -119,7 +122,6 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
               opacity: shouldShow ? 1 : 0,
               visibility: shouldShow ? 'visible' : 'hidden',
               pointerEvents: 'none',
-              transform: 'rotate(-90deg)',
               position: 'absolute',
               top: 0,
               left: 0,
