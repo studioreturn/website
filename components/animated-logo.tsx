@@ -11,6 +11,7 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
   const [currentAnimation, setCurrentAnimation] = useState(3) // Start with animation #3 (eyes moving around)
   const [nextAnimation, setNextAnimation] = useState<number | null>(null)
   const [isAnimating, setIsAnimating] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
   const [cacheBust, setCacheBust] = useState<Record<number, number>>({
     1: 0,
     2: 0,
@@ -20,7 +21,7 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
   const transitionTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleHover = () => {
-    if (isAnimating) return
+    if (isAnimating || !isMounted) return
     
     if (animationTimerRef.current) {
       clearTimeout(animationTimerRef.current)
@@ -58,6 +59,9 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
   const isBlue = color === "#1100FF"
 
   useEffect(() => {
+    // Mark as mounted to render all animations
+    setIsMounted(true)
+    
     // Initial animation timer
     animationTimerRef.current = setTimeout(() => {
       setIsAnimating(false)
@@ -89,6 +93,11 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
         const isNext = nextAnimation === num
         const shouldShow = isCurrent || isNext
         
+        // Only render non-current animations after mount to prevent flash
+        if (!isMounted && num !== currentAnimation) {
+          return null
+        }
+        
         return (
           <object
             key={`smile-${num}`}
@@ -100,6 +109,7 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
               width: `${size}px`,
               height: `${size}px`,
               opacity: shouldShow ? 1 : 0,
+              visibility: shouldShow ? 'visible' : 'hidden',
               pointerEvents: 'none',
               transform: 'rotate(-90deg)',
               position: 'absolute',
