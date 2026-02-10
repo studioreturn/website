@@ -92,6 +92,8 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
         width: `${size}px`,
         height: `${size}px`,
         filter: isBlue ? 'brightness(0) saturate(100%) invert(11%) sepia(100%) saturate(7466%) hue-rotate(246deg) brightness(91%) contrast(148%)' : 'none',
+        opacity: isMounted ? 1 : 0,
+        transition: 'opacity 0.2s ease-in-out',
       }}
     >
       {[1, 2, 3].map((num) => {
