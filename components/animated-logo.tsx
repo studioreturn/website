@@ -32,21 +32,27 @@ export function AnimatedLogo({ color, size = 48 }: AnimatedLogoProps) {
     
     const next = (currentAnimation % 3) + 1
     
-    // Start loading the next animation with new cache bust
-    setCacheBust(prev => ({
-      ...prev,
-      [next]: Date.now()
-    }))
+    // First, fade out current animation
+    setNextAnimation(null)
     
-    // Show next animation immediately for crossfade
-    setNextAnimation(next)
-    
-    // After crossfade completes, make next the current
-    transitionTimerRef.current = setTimeout(() => {
-      setCurrentAnimation(next)
-      setNextAnimation(null)
-      transitionTimerRef.current = null
-    }, 200) // Match this to crossfade duration
+    // After fade out, load and show next animation
+    setTimeout(() => {
+      // Start loading the next animation with new cache bust
+      setCacheBust(prev => ({
+        ...prev,
+        [next]: Date.now()
+      }))
+      
+      // Show next animation
+      setNextAnimation(next)
+      
+      // After crossfade completes, make next the current
+      transitionTimerRef.current = setTimeout(() => {
+        setCurrentAnimation(next)
+        setNextAnimation(null)
+        transitionTimerRef.current = null
+      }, 250)
+    }, 100) // Brief delay between fade out and fade in
     
     setIsAnimating(true)
     
