@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ArrowUpRight, Copy } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { AnimatedLogo } from "./animated-logo"
 
 export function Footer() {
   const pathname = usePathname() ?? ""
@@ -39,17 +40,10 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
           {/* Brand */}
           <div className="space-y-4">
-            <div
-              className="text-white"
-              style={{
-                fontFamily: "Arial, sans-serif",
-                fontSize: "32px",
-                lineHeight: 1,
-                fontWeight: "bold",
-              }}
-            >
-              :)
-            </div>
+            <AnimatedLogo 
+              color="#ffffff"
+              size={48}
+            />
             <p className="text-white/70 font-mono text-sm">Polite products from Bristol, UK.</p>
             <div className="space-y-1 pt-2">
               <div className="flex items-center gap-2">
