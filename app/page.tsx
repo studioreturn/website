@@ -3,9 +3,9 @@
 import Link from "next/link"
 import Image from "next/image"
 import { PageWrapper } from "@/components/page-wrapper"
-import { BoltIcon, type BoltIconHandle } from "@/components/ui/bolt-icon"
-import { GlobeIcon, type GlobeIconHandle } from "@/components/ui/globe-icon"
-import { LoaderPinwheelIcon, type LoaderPinwheelIconHandle } from "@/components/ui/loader-pinwheel-icon"
+import { UIUXLottieIcon, type UIUXLottieIconHandle } from "@/components/ui/uiux-lottie-icon"
+import { GlobeLottieIcon, type GlobeLottieIconHandle } from "@/components/ui/globe-lottie-icon"
+import { BrandingLottieIcon, type BrandingLottieIconHandle } from "@/components/ui/branding-lottie-icon"
 import { ArrowUpRight, ArrowRight, Copy, X } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -18,9 +18,9 @@ export default function Page() {
   const { toast } = useToast()
   const workGridRef = useRef<HTMLDivElement>(null)
   const workSectionRef = useRef<HTMLDivElement>(null)
-  const uiuxIconRef = useRef<BoltIconHandle>(null)
-  const globeIconRef = useRef<GlobeIconHandle>(null)
-  const brandsIconRef = useRef<LoaderPinwheelIconHandle>(null)
+  const uiuxIconRef = useRef<UIUXLottieIconHandle>(null)
+  const globeIconRef = useRef<GlobeLottieIconHandle>(null)
+  const brandsIconRef = useRef<BrandingLottieIconHandle>(null)
   const servicesSectionRef = useRef<HTMLElement>(null)
   const [horizontalLinePositions, setHorizontalLinePositions] = useState<number[]>([])
   const [isMobile, setIsMobile] = useState(false)
@@ -987,8 +987,8 @@ export default function Page() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {/* Branding */}
             <div className="space-y-4">
-              <div className="mb-6 w-12 h-12" style={{ color: BLUE }}>
-                <LoaderPinwheelIcon ref={brandsIconRef} size={48} aria-label="Brands icon" />
+              <div className="mb-6 w-12 h-12">
+                <BrandingLottieIcon ref={brandsIconRef} size={48} />
               </div>
               <h3 className="font-serif font-bold text-2xl" style={{ color: DARK_TEXT }}>
                 Brands
@@ -1000,8 +1000,8 @@ export default function Page() {
 
             {/* Website Design & Dev */}
             <div className="space-y-4">
-              <div className="mb-6 w-12 h-12" style={{ color: BLUE }}>
-                <GlobeIcon ref={globeIconRef} size={48} aria-label="Websites icon" />
+              <div className="mb-6 w-12 h-12">
+                <GlobeLottieIcon ref={globeIconRef} size={48} />
               </div>
               <h3 className="font-serif font-bold text-2xl" style={{ color: DARK_TEXT }}>
                 Websites
@@ -1013,8 +1013,8 @@ export default function Page() {
 
             {/* UI/UX */}
             <div className="space-y-4">
-              <div className="mb-6 w-12 h-12" style={{ color: BLUE }}>
-                <BoltIcon ref={uiuxIconRef} size={48} aria-label="UI/UX icon" />
+              <div className="mb-6 w-12 h-12">
+                <UIUXLottieIcon ref={uiuxIconRef} size={48} />
               </div>
               <h3 className="font-serif font-bold text-2xl" style={{ color: DARK_TEXT }}>
                 UI/UX
